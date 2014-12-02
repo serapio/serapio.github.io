@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #666666;
+  font-family: Arial,Helv,sans-serif;
+  font-size: 14px;
+}
+a:link, a:visited {
+  color: #cccccc;
+  font-weight: bold;
+  text-decoration: none;
+}
+a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+.content_title {
+  background: transparent url(header.gif) no-repeat scroll left top;
+  padding-left: 15px;
+  position: absolute;
+  margin-left: 1px;
+  font-size: 18px;
+  width: 490px;
+  padding-top: 15px;
+  margin-bottom: 1px;
+  font-weight: bold;
+  color: #ffffff;
+  height: 21px;
+}
+#content_title a, #content_title a:visited {
+  color: #def0fe;
+}
+h3 {
+  background: transparent url(rightheader.gif) no-repeat scroll left top;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 15px;
+  padding-left: 15px;
+  font-size: 16px;
+  color: #ffffff;
+  height: 20px;
+}
+#zaglavlje {
+  background: transparent url(logo.gif) no-repeat scroll 0%;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  padding-left: 15px;
+  color: #ffffff;
+  height: 73px;
+}
+#logo {
+  padding-top: 25px;
+}
+#sadrzaj {
+  margin: 0px auto;
+  width: 750px;
+  background-color: #ffffff;
+  color: #333333;
+  line-height: 130%;
+}
+#desna_kolona {
+  background: #ffffff url(rightcontent.gif) repeat scroll 0%;
+  float: right;
+  width: 239px;
+  text-align: left;
+  color: #cccccc;
+}
+.srednja_kolona {
+  background: transparent url(content.gif) repeat scroll left top;
+  margin-left: 0px;
+  margin-right: 245px;
+  margin-bottom: 2px;
+  max-width: 39em;
+  text-align: justify;
+}
+.text {
+  padding: 40px 15px 20px;
+  background: transparent url(footer.gif) no-repeat scroll left bottom;
+  color: #ffffff;
+}
+.text_desno {
+  padding: 5px 15px 20px;
+  background: transparent url(rightfooter.gif) no-repeat scroll left bottom;
+  color: #e2e2e2;
+}
+#info {
+  border: 1px solid #858585;
+  padding: 5px;
+  background: #535353 none repeat scroll 0%;
+  color: #cccccc;
+  font-size: 9px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

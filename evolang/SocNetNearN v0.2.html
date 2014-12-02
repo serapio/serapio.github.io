@@ -1,0 +1,643 @@
+<html>
+<head>
+<title>SocNetNearN v0.2</title>
+<style type="text/css">
+<!--
+  :link { color: rgb(110, 0, 110); } 
+  :visited { color: rgb(110, 0, 110); } 
+  body { margin-left: 5px; font-family: arial, sans-serif; 
+         background: white; font-size: 12pt } 
+  h2 { background: rgb(166,172,255); 
+       font-size: 15pt; 
+       padding-left: 6px; padding-right: 6px; padding-top: 6px; 
+       padding-bottom: 6px; } 
+  p { margin-left: 10px; } 
+  pre { margin-left: 13px; background: rgb(225,225,225); 
+        font-family: monospace; padding-left: 3px; padding-right: 3px; 
+        padding-top: 3px; padding-bottom: 3px; } 
+-->
+</style>
+</head>
+<body>
+
+<p>This model is meant to model speaker variation in a simple linguistic system. The speakers interact according to a social network, exchanging signs which consist of two-dimensional vector forms associated with categorical meanings.</p><br>
+
+<p>
+<applet code="org.nlogo.lite.Applet"
+        archive="NetLogoLite.jar"
+        width="1063" height="457">
+  <param name="DefaultModel"
+         value="SocNetNearN%20v0.2.nlogo">
+</applet>
+</p>
+
+<p>powered by
+<a target="_blank" href="http://ccl.northwestern.edu/netlogo/">NetLogo</a></p>
+
+<p>view/download model file:
+<a href="SocNetNearN%20v0.2.nlogo">SocNetNearN v0.2.nlogo</a>
+</p>
+
+<p>The applet requires Java 5 or higher.
+Java must be enabled in your browser settings.
+Mac users must have Mac OS X 10.4 or higher.
+Windows and Linux users may obtain the latest Java from
+<a href="http://java.sun.com/getjava/download.html">Sun's Java site</a>.</p>
+
+<h2>WHAT IS IT?</h2>
+<p>This model is meant to model speaker variation in a simple linguistic system. The speakers interact according to a social network, exchanging signs which consist of two-dimensional vector forms associated with categorical meanings.</p><br>
+<h2>HOW IT WORKS</h2>
+<p>The buttons and parameters in the upper &quot;Network&quot; group establish a sparse social network on the continuum between a preferential attachment network (as found in the Language Change demo in the models library) and a randomly linked network. (Note that this is not a conventional random graph -- each node has at least one edge, and for each edge the partner is chosen randomly.) </p>
+<p>When hear-neighbors is set to [On], the people take turns selecting a speaking partner, and they attempt a communication event. The speaker chooses a point in 2-D space and a categorical meaning (associated with a shape), generally a noisy copy of a previous sign. The hearer attempts to guess the meaning, and if all goes well, both the speaker and the hearer store a memory of the event.</p>
+<p>When hear-neighbors is set to [Off], the people take turns producing and categorizing random signs, each independent of the other people. Each person establishes their own meaning space because of the production and categorization processes, without any actual interaction.</p><br>
+<h2>HOW TO USE IT</h2>
+<p>Network Section:<br> - links-per-person: ratio of links to people, except sometimes duplicate links are produced, which are reduced to one link<br> - pref-attach: the degree of preferential attachment bias. 0 is a randomly linked graph, and 100 is a preferential attachment graph as in the Language Change model<br> - num-people: number of speakers in the network<br> - setup: initialize the social network<br> - layout: untangle the network into a spring layout</p>
+<p>Exemplars Section:<br> - hear-neighbors: interact with neighbors rather than jabber to yourself<br> - forget-rate: rate at which exemplars randomly die<br> - prod-noise: standard deviation of gaussian noise when reproducing a vector<br> - cat-percept-bias: degree of categorical perception bias. 0 leaves the exemplar's vector as it was heard, and 100 moves the vector to match the nearest neighbor's vector<br> - perc-alignment: probability that the hearer will use a perception strategy based on previous experience with that speaker<br> - prod-alignment: probability that the speaker will use a production strategy based on previous experience with that hearer<br> - forget-missed: probability that an incorrectly guessed exemplar will be stored<br> - reset: erase all the exemplars<br> - go: make the speakers produce exemplars</p>
+<p>Plots<br> - divergences: Measuring across speakers, people min-dist divergence is the mean distance between one speaker's exemplars and the closest exemplars of the same meaning in their neighbors' exemplar spaces. Within speakers, category min-dist divergence is the mean distance between an exemplar and the closest exemplar of the same meaning, and category max-dist divergence is the mean distance between an exemplar and the farthest exemplar of the same meaning.<br> - showing = net: The speaker social network. Labels on links are the min-dist divergences along those links. Labels on people consist of their ID number and the accuracy of their last 20 meaning categorization guesses.<br> - showing = ID numbers: The exemplar space of the person with the indicated ID number. In the plot, shapes indicate the meaning category, and position in space represents the two dimensions of the sign's vector. The labels and colors correspond to the speaker in the event that created that exemplar.</p><br>
+<h2>THINGS TO NOTICE</h2>
+<p>This section could give some ideas of things for the user to notice while running the model.</p><br>
+<h2>THINGS TO TRY</h2>
+<p>This section could give some ideas of things for the user to try to do (move sliders, switches, etc.) with the model.</p><br>
+<h2>EXTENDING THE MODEL</h2>
+<p>This section could give some ideas of things to add or change in the procedures tab to make the model more complicated, detailed, accurate, etc.</p><br>
+<h2>NETLOGO FEATURES</h2>
+<p>This section could point out any especially interesting or unusual features of NetLogo that the model makes use of, particularly in the Procedures tab.  It might also point out places where workarounds were needed because of missing features.</p><br>
+<h2>RELATED MODELS</h2>
+<p>NetLogo Model Library &gt; Social Science &gt; (unverified) &gt; Language Change</p><br>
+<h2>CREDITS AND REFERENCES</h2>
+<p>This section could contain a reference to the model's URL on the web if it has one, as well as any other necessary credits or references.</p><br>
+<h2>PROCEDURES</h2>
+<pre><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  Setup</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;; The setup just creates the network of speakers</font><font color="#000000">
+</font><font color="#5a5a5a">;; and sets up some globals</font><font color="#000000">
+
+</font><font color="#660096">breed</font><font color="#000000"> [ exemplars exemplar ]
+</font><font color="#007f69">exemplars-own</font><font color="#000000"> [ 
+  meaning      </font><font color="#5a5a5a">;; an integer index of the &quot;meaning&quot; category</font><font color="#000000">
+  owner        </font><font color="#5a5a5a">;; the person who remembers it</font><font color="#000000">
+  speaker      </font><font color="#5a5a5a">;; the person who said it</font><font color="#000000">
+]
+
+</font><font color="#660096">breed</font><font color="#000000"> [ people person ]
+</font><font color="#007f69">people-own</font><font color="#000000"> [ 
+  exemplar-set     </font><font color="#5a5a5a">;; the set of exemplars that the person remembers</font><font color="#000000">
+  guesses-history  </font><font color="#5a5a5a">;; success indicator for the past 100 guesses</font><font color="#000000">
+]
+  
+</font><font color="#007f69">globals</font><font color="#000000"> [ 
+  lexicon      </font><font color="#5a5a5a">;; the list of possible meaning categories</font><font color="#000000">
+  showing      </font><font color="#5a5a5a">;; which person's exemplar space is showing now</font><font color="#000000">
+]
+
+
+
+</font><font color="#007f69">to</font><font color="#000000"> setup
+  </font><font color="#0000aa">clear-all</font><font color="#000000">
+  </font><font color="#0000aa">set-default-shape</font><font color="#000000"> people </font><font color="#963700">&quot;person&quot;</font><font color="#000000">
+  make-network
+  </font><font color="#0000aa">set</font><font color="#000000"> showing </font><font color="#963700">&quot;net&quot;</font><font color="#000000">
+  
+  </font><font color="#0000aa">set</font><font color="#000000"> lexicon [
+     </font><font color="#5a5a5a">;; currently the lexicon has no structure, </font><font color="#000000">
+     </font><font color="#5a5a5a">;; but we could make semantic domains relevant</font><font color="#000000">
+    </font><font color="#963700">&quot;turtle&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;fish&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;cow&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;butterfly&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;squirrel&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;rabbit&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;ant&quot;</font><font color="#000000">
+    </font><font color="#963700">&quot;spider&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 1&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 2&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 3&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 4&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 5&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;die 6&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;plant&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;flower&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;tree&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;    &quot;leaf&quot;</font><font color="#000000">
+  ]
+
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> reset
+  </font><font color="#0000aa">ask</font><font color="#000000"> exemplars [ </font><font color="#0000aa">die</font><font color="#000000"> ]
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  Making the network</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;;; This code is mostly directly from the &quot;Language Change&quot; model</font><font color="#000000">
+</font><font color="#5a5a5a">;;; in the models library, just with some changes to allow</font><font color="#000000">
+</font><font color="#5a5a5a">;;; sliders for nets that are more dense and/or less biased toward</font><font color="#000000">
+</font><font color="#5a5a5a">;;; preferential-attachment</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> make-network
+  </font><font color="#5a5a5a">;; make a bunch of isolated people</font><font color="#000000">
+  create-people num-people [
+    </font><font color="#5a5a5a">;; start in random position near edge of world</font><font color="#000000">
+    </font><font color="#0000aa">rt</font><font color="#000000"> </font><font color="#660096">random-float</font><font color="#000000"> </font><font color="#963700">360</font><font color="#000000">
+    </font><font color="#0000aa">fd</font><font color="#000000"> </font><font color="#660096">max-pxcor</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">size</font><font color="#000000"> </font><font color="#963700">2</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> </font><font color="#963700">15</font><font color="#000000"> </font><font color="#660096">+</font><font color="#000000"> </font><font color="#963700">30</font><font color="#000000"> </font><font color="#660096">*</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> exemplar-set </font><font color="#660096">turtle-set</font><font color="#000000"> [ ]
+    </font><font color="#0000aa">set</font><font color="#000000"> guesses-history (</font><font color="#660096">list</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000">)
+  ]  
+  
+  </font><font color="#5a5a5a">;; Then connect them up into a network:</font><font color="#000000">
+  
+  </font><font color="#5a5a5a">;; (1) make the initial network of two nodes and an edge</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> partner </font><font color="#963700">nobody</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> partner2 </font><font color="#963700">nobody</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> first-node </font><font color="#660096">one-of</font><font color="#000000"> people
+  </font><font color="#0000aa">let</font><font color="#000000"> second-node </font><font color="#660096">one-of</font><font color="#000000"> people </font><font color="#660096">with</font><font color="#000000"> [ </font><font color="#660096">self</font><font color="#000000"> </font><font color="#660096">!=</font><font color="#000000"> first-node ]
+  </font><font color="#0000aa">ask</font><font color="#000000"> first-node [ </font><font color="#0000aa">create-link-with</font><font color="#000000"> second-node [ </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> </font><font color="#963700">white</font><font color="#000000"> ] ] </font><font color="#5a5a5a">; make the first edge</font><font color="#000000">
+  
+  </font><font color="#5a5a5a">;; for each person, connect it to one or two other people</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+    </font><font color="#0000aa">let</font><font color="#000000"> new-node </font><font color="#660096">self</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> partner find-partner new-node
+    </font><font color="#0000aa">set</font><font color="#000000"> partner2 find-partner new-node
+    </font><font color="#0000aa">ask</font><font color="#000000"> new-node [ </font><font color="#0000aa">create-link-with</font><font color="#000000"> partner [ </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> </font><font color="#963700">white</font><font color="#000000"> ] ]
+    </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> </font><font color="#660096">+</font><font color="#000000"> </font><font color="#660096">random-float</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> </font><font color="#660096">&lt;</font><font color="#000000"> links-per-person [
+       </font><font color="#0000aa">ask</font><font color="#000000"> new-node [ </font><font color="#0000aa">create-link-with</font><font color="#000000"> partner2 [ </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> </font><font color="#963700">white</font><font color="#000000"> ] ]
+    ]
+    layout
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+</font><font color="#007f69">to-report</font><font color="#000000"> find-partner [for-node]
+  </font><font color="#5a5a5a">;; There are two strategies for choosing a partner:</font><font color="#000000">
+  </font><font color="#5a5a5a">;; (1) pick with uniform probability from all other people</font><font color="#000000">
+  </font><font color="#5a5a5a">;; (2) pick with people with a probability proportional to the number of links they have</font><font color="#000000">
+  </font><font color="#5a5a5a">;; This code lets you interpolate between these strategies, using a raffle ticket system</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> pick </font><font color="#660096">random-float</font><font color="#000000"> ((</font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">-</font><font color="#000000"> pref-attach) </font><font color="#660096">*</font><font color="#000000"> (</font><font color="#963700">-1</font><font color="#000000"> </font><font color="#660096">+</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> people)
+                        </font><font color="#660096">+</font><font color="#000000"> (pref-attach) </font><font color="#660096">*</font><font color="#000000"> </font><font color="#660096">sum</font><font color="#000000"> [</font><font color="#660096">count</font><font color="#000000"> </font><font color="#660096">link-neighbors</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> (people </font><font color="#660096">with</font><font color="#000000"> [</font><font color="#660096">self</font><font color="#000000"> </font><font color="#660096">!=</font><font color="#000000"> for-node])
+                        )
+  </font><font color="#0000aa">let</font><font color="#000000"> partner </font><font color="#963700">nobody</font><font color="#000000">
+  </font><font color="#5a5a5a">;; step through the line of people, counting out their tickets until you get to the winner</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> people </font><font color="#660096">with</font><font color="#000000"> [ </font><font color="#660096">self</font><font color="#000000"> </font><font color="#660096">!=</font><font color="#000000"> for-node ] [
+    </font><font color="#5a5a5a">;; if there's no winner yet...</font><font color="#000000">
+    </font><font color="#0000aa">if</font><font color="#000000"> partner </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">nobody</font><font color="#000000"> [
+      </font><font color="#0000aa">ifelse</font><font color="#000000"> ((</font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">-</font><font color="#000000"> pref-attach) </font><font color="#660096">+</font><font color="#000000"> pref-attach </font><font color="#660096">*</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> </font><font color="#660096">link-neighbors</font><font color="#000000">) </font><font color="#660096">&gt;</font><font color="#000000"> pick [
+        </font><font color="#0000aa">set</font><font color="#000000"> partner </font><font color="#660096">self</font><font color="#000000">
+      ][
+        </font><font color="#0000aa">set</font><font color="#000000"> pick pick </font><font color="#660096">-</font><font color="#000000"> ((</font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">-</font><font color="#000000"> pref-attach) </font><font color="#660096">+</font><font color="#000000"> pref-attach </font><font color="#660096">*</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> </font><font color="#660096">link-neighbors</font><font color="#000000">)
+      ]
+    ]
+  ]
+  </font><font color="#0000aa">report</font><font color="#000000"> partner
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> layout
+  </font><font color="#0000aa">layout-spring</font><font color="#000000"> (people </font><font color="#660096">with</font><font color="#000000"> [</font><font color="#660096">any?</font><font color="#000000"> </font><font color="#660096">link-neighbors</font><font color="#000000">]) </font><font color="#660096">links</font><font color="#000000"> </font><font color="#963700">0.05</font><font color="#000000"> </font><font color="#963700">6</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000">
+  </font><font color="#0000aa">display</font><font color="#000000">  </font><font color="#5a5a5a">;; for smooth animation</font><font color="#000000">
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  Let the people talk</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;; There are two modes of talking:</font><font color="#000000">
+</font><font color="#5a5a5a">;;  - In the hear-neighbors=True mode, each person selects an interlocutor, and they</font><font color="#000000">
+</font><font color="#5a5a5a">;;    try to communicate a message. Depending on their success, they both might store</font><font color="#000000">
+</font><font color="#5a5a5a">;;    an exemplar of that communication.</font><font color="#000000">
+</font><font color="#5a5a5a">;;  - In the hear-neighbors=False mode, each person speaks a random message, storing</font><font color="#000000">
+</font><font color="#5a5a5a">;;    an exemplar, and then each person hears a random message, also storing an exemplar</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> go
+  </font><font color="#5a5a5a">;; speak ;; have each person make their own exemplars</font><font color="#000000">
+  </font><font color="#5a5a5a">;; listen ;; have each person integrate a foreign exemplar</font><font color="#000000">
+  </font><font color="#0000aa">ifelse</font><font color="#000000"> hear-neighbors [
+    speak-and-listen </font><font color="#5a5a5a">;; each person listens to another person, and they each make exemplars</font><font color="#000000">
+  ]
+  [
+    speak </font><font color="#5a5a5a">;; each person speaks an arbitrary meaning</font><font color="#000000">
+    listen </font><font color="#5a5a5a">;; each person hears an arbitrary form and categorizes it</font><font color="#000000">
+  ]
+  
+  </font><font color="#0000aa">ask</font><font color="#000000"> exemplars </font><font color="#5a5a5a">;; kill some exemplars off, indiscriminately</font><font color="#000000">
+  [
+    </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">random-float</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> </font><font color="#660096">&lt;</font><font color="#000000"> forget-rate [ </font><font color="#0000aa">die</font><font color="#000000"> ]
+  ]
+  
+  do-plots
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> speak-and-listen
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [ </font><font color="#5a5a5a">;; ask each person to be a hearer</font><font color="#000000">
+   
+    </font><font color="#0000aa">let</font><font color="#000000"> ex-src get-source-exemplar </font><font color="#660096">self</font><font color="#000000"> </font><font color="#5a5a5a">;; find a speaker to listen to</font><font color="#000000">
+    
+    </font><font color="#0000aa">ask</font><font color="#000000"> ex-src [
+      </font><font color="#0000aa">let</font><font color="#000000"> talker owner
+      </font><font color="#0000aa">let</font><font color="#000000"> hearer </font><font color="#660096">myself</font><font color="#000000">
+      
+      hatch-exemplars </font><font color="#963700">1</font><font color="#000000"> [
+        </font><font color="#0000aa">set</font><font color="#000000"> speaker talker
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> speaker
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> [</font><font color="#660096">color</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> speaker
+        </font><font color="#5a5a5a">;; meaning is copied from mother exemplar</font><font color="#000000">
+        </font><font color="#0000aa">set</font><font color="#000000"> owner hearer
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">hidden?</font><font color="#000000"> </font><font color="#660096">not</font><font color="#000000"> (showing </font><font color="#660096">=</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> owner)
+        
+        </font><font color="#5a5a5a">;; add production noise</font><font color="#000000">
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> </font><font color="#660096">random-normal</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> prod-noise
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> </font><font color="#660096">random-normal</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> prod-noise
+        
+        </font><font color="#0000aa">let</font><font color="#000000"> guess guess-meaning </font><font color="#660096">self</font><font color="#000000">
+        </font><font color="#0000aa">ask</font><font color="#000000"> hearer [ 
+          </font><font color="#0000aa">set</font><font color="#000000"> guesses-history (</font><font color="#660096">sentence</font><font color="#000000"> guesses-history </font><font color="#660096">ifelse-value</font><font color="#000000"> (guess </font><font color="#660096">=</font><font color="#000000"> [meaning] </font><font color="#660096">of</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">) [</font><font color="#963700">1</font><font color="#000000">] [</font><font color="#963700">0</font><font color="#000000">])
+          </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> guesses-history </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">20</font><font color="#000000"> [
+            </font><font color="#0000aa">set</font><font color="#000000"> guesses-history </font><font color="#660096">remove-item</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> guesses-history
+          ]
+        ]
+        </font><font color="#5a5a5a">;; show [guesses-history] of hearer</font><font color="#000000">
+        
+        </font><font color="#0000aa">ifelse</font><font color="#000000"> (</font><font color="#660096">random</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">&lt;</font><font color="#000000"> forget-missed) </font><font color="#660096">and</font><font color="#000000"> </font><font color="#660096">not</font><font color="#000000"> (guess </font><font color="#660096">=</font><font color="#000000"> meaning) [ 
+          </font><font color="#5a5a5a">;; if miss-communicated, then nobody remembers it</font><font color="#000000">
+          </font><font color="#5a5a5a">;;show (list &quot;Fail!&quot; guess meaning)</font><font color="#000000">
+          </font><font color="#0000aa">die</font><font color="#000000"> 
+        ]
+        [ </font><font color="#5a5a5a">;; otherwise, they both remember it with some categorization bias</font><font color="#000000">
+          </font><font color="#5a5a5a">;; duplicate in speaker</font><font color="#000000">
+          hatch-exemplars </font><font color="#963700">1</font><font color="#000000"> [
+            </font><font color="#0000aa">set</font><font color="#000000"> owner talker
+            </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">hidden?</font><font color="#000000"> </font><font color="#660096">not</font><font color="#000000"> (showing </font><font color="#660096">=</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> owner)
+              
+            cat-percept </font><font color="#660096">self</font><font color="#000000">
+            </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">shape</font><font color="#000000"> meaning-to-shape meaning
+          ]
+            
+          cat-percept </font><font color="#660096">self</font><font color="#000000">
+          </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">shape</font><font color="#000000"> meaning-to-shape meaning
+          </font><font color="#5a5a5a">;;show (list speaker talker owner hearer label [label] of talker )</font><font color="#000000">
+        ] 
+      ]
+      
+      </font><font color="#0000aa">if</font><font color="#000000"> speaker </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">nobody</font><font color="#000000"> [
+         </font><font color="#5a5a5a">;; this was an imagined exemplar</font><font color="#000000">
+         </font><font color="#0000aa">die</font><font color="#000000">
+      ]
+    ]
+  ]
+  
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+    </font><font color="#0000aa">set</font><font color="#000000"> exemplar-set exemplars </font><font color="#660096">with</font><font color="#000000"> [owner </font><font color="#660096">=</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">]
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#007f69">to-report</font><font color="#000000"> guess-meaning [ex]
+  </font><font color="#5a5a5a">;; try to guess meaning based on the nearest neighbor of ex</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> guess </font><font color="#963700">-1</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> ex [
+    </font><font color="#0000aa">let</font><font color="#000000"> cohort ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> owner)
+    </font><font color="#0000aa">let</font><font color="#000000"> subcohort (cohort </font><font color="#660096">with</font><font color="#000000"> [speaker </font><font color="#660096">=</font><font color="#000000"> [speaker] </font><font color="#660096">of</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000"> ])
+    </font><font color="#0000aa">ifelse</font><font color="#000000"> ( </font><font color="#660096">random</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">&lt;</font><font color="#000000"> perc-alignment  </font><font color="#5a5a5a">;; if we are paying attention to how they've said stuff before</font><font color="#000000">
+      </font><font color="#660096">and</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> subcohort </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000">) ) </font><font color="#5a5a5a">;; and we have heard them say a few </font><font color="#000000">
+    [ </font><font color="#5a5a5a">;; then guess based on what we heard them say before</font><font color="#000000">
+      </font><font color="#0000aa">let</font><font color="#000000"> nn </font><font color="#660096">min-one-of</font><font color="#000000"> subcohort [ </font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000"> ]
+      </font><font color="#0000aa">set</font><font color="#000000"> guess [meaning] </font><font color="#660096">of</font><font color="#000000"> nn
+      </font><font color="#5a5a5a">;; ask nn [ show distance ex ]</font><font color="#000000">
+    ]
+    [  </font><font color="#5a5a5a">;; otherwise just categorize according to all the exemplars we know</font><font color="#000000">
+      </font><font color="#0000aa">ifelse</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> cohort) </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> [
+        </font><font color="#0000aa">let</font><font color="#000000"> nn </font><font color="#660096">min-one-of</font><font color="#000000"> cohort [ </font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000"> ]
+        </font><font color="#0000aa">set</font><font color="#000000"> guess [meaning] </font><font color="#660096">of</font><font color="#000000"> nn
+        </font><font color="#5a5a5a">;; ask nn [ show distance ex ]</font><font color="#000000">
+      ]
+      [ </font><font color="#5a5a5a">;; if we didn't have any exemplars, just make something up</font><font color="#000000">
+        </font><font color="#0000aa">set</font><font color="#000000"> guess </font><font color="#660096">random</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon
+      ]      
+    ]
+  ]
+  
+  </font><font color="#0000aa">report</font><font color="#000000"> guess
+</font><font color="#007f69">end</font><font color="#000000">
+    
+
+</font><font color="#007f69">to-report</font><font color="#000000"> get-source-exemplar [ hearer ]
+  </font><font color="#5a5a5a">;; ask the hearer to find one of their neighbors' exemplars, to be copied</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> ex-src </font><font color="#963700">nobody</font><font color="#000000">
+  
+  </font><font color="#0000aa">ask</font><font color="#000000"> hearer [
+    
+    </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">one-of</font><font color="#000000"> </font><font color="#660096">link-neighbors</font><font color="#000000"> [
+      </font><font color="#0000aa">let</font><font color="#000000"> talker </font><font color="#660096">self</font><font color="#000000">
+
+      </font><font color="#0000aa">let</font><font color="#000000"> meaning-cat </font><font color="#660096">random</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon
+      
+      </font><font color="#0000aa">ifelse</font><font color="#000000"> ( </font><font color="#660096">random</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> </font><font color="#660096">&lt;</font><font color="#000000"> prod-alignment )
+      [
+        </font><font color="#0000aa">ifelse</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [speaker </font><font color="#660096">=</font><font color="#000000"> hearer </font><font color="#660096">and</font><font color="#000000"> meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]) </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000">
+        [ 
+          </font><font color="#5a5a5a">;; if possible, the talker recalls an exemplar spoken by the hearer</font><font color="#000000">
+          </font><font color="#0000aa">set</font><font color="#000000"> ex-src </font><font color="#660096">one-of</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [speaker </font><font color="#660096">=</font><font color="#000000"> hearer </font><font color="#660096">and</font><font color="#000000"> meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]
+        ]
+        [
+          </font><font color="#0000aa">if</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]) </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> 
+          [
+            </font><font color="#5a5a5a">;; next best is to recall an exemplar spoken by the talker</font><font color="#000000">
+            </font><font color="#0000aa">set</font><font color="#000000"> ex-src </font><font color="#660096">one-of</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [speaker </font><font color="#660096">=</font><font color="#000000"> talker </font><font color="#660096">and</font><font color="#000000"> meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]
+          ]
+        ]
+      ]
+      [
+        </font><font color="#0000aa">if</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]) </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000">
+        [
+          </font><font color="#5a5a5a">;; if possible, find a historical exemplar with this meaning</font><font color="#000000">
+          </font><font color="#0000aa">set</font><font color="#000000"> ex-src </font><font color="#660096">one-of</font><font color="#000000"> exemplar-set </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> meaning-cat]
+        ]
+      ]
+      
+      </font><font color="#0000aa">if</font><font color="#000000"> (ex-src </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">nobody</font><font color="#000000">) </font><font color="#5a5a5a">;; none of the above applied, so we just hallucinate one</font><font color="#000000">
+      [
+        hatch-exemplars </font><font color="#963700">1</font><font color="#000000"> [ 
+          </font><font color="#0000aa">set</font><font color="#000000"> meaning meaning-cat
+          </font><font color="#0000aa">set</font><font color="#000000"> owner talker
+          </font><font color="#0000aa">set</font><font color="#000000"> speaker </font><font color="#963700">nobody</font><font color="#000000"> </font><font color="#5a5a5a">;; label this as imaginary, so we can kill it when we're done</font><font color="#000000">
+          </font><font color="#0000aa">setxy</font><font color="#000000"> </font><font color="#660096">random-xcor</font><font color="#000000"> </font><font color="#660096">random-ycor</font><font color="#000000">
+          </font><font color="#0000aa">set</font><font color="#000000"> ex-src </font><font color="#660096">self</font><font color="#000000">
+          ]
+      ]
+      </font><font color="#5a5a5a">;; to-do: option to select optimal exemplar</font><font color="#000000">
+      
+    ]
+  ]
+  </font><font color="#0000aa">report</font><font color="#000000"> ex-src
+</font><font color="#007f69">end</font><font color="#000000">
+     
+
+  
+</font><font color="#007f69">to</font><font color="#000000"> cat-percept [ ex ]
+  </font><font color="#5a5a5a">;; categorical perception bias</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> cohort (([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> owner) </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> [meaning] </font><font color="#660096">of</font><font color="#000000"> ex])
+  </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> cohort </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> [
+    </font><font color="#0000aa">let</font><font color="#000000"> nearest </font><font color="#660096">min-one-of</font><font color="#000000"> cohort [ </font><font color="#660096">distance</font><font color="#000000"> ex ]
+    </font><font color="#5a5a5a">;; show (list meaning self cohort with [meaning = [meaning] of self])</font><font color="#000000">
+    </font><font color="#0000aa">ask</font><font color="#000000"> ex [
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> </font><font color="#660096">+</font><font color="#000000"> ([</font><font color="#660096">xcor</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> nearest </font><font color="#660096">-</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000">) </font><font color="#660096">*</font><font color="#000000"> cat-percept-bias </font><font color="#660096">/</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> 
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> </font><font color="#660096">+</font><font color="#000000"> ([</font><font color="#660096">ycor</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> nearest </font><font color="#660096">-</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000">) </font><font color="#660096">*</font><font color="#000000"> cat-percept-bias </font><font color="#660096">/</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> 
+    ]
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+  
+  
+</font><font color="#007f69">to</font><font color="#000000"> speak 
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+    </font><font color="#5a5a5a">;; make an exemplar based on your own exemplar set</font><font color="#000000">
+    hatch-exemplars </font><font color="#963700">1</font><font color="#000000"> [
+      </font><font color="#0000aa">set</font><font color="#000000"> speaker </font><font color="#660096">myself</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> owner </font><font color="#660096">myself</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">hidden?</font><font color="#000000"> </font><font color="#660096">not</font><font color="#000000"> (showing </font><font color="#660096">=</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> speaker)
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> speaker 
+      
+      </font><font color="#0000aa">let</font><font color="#000000"> lex </font><font color="#660096">random</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon </font><font color="#5a5a5a">;; choose a random semantic category</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> meaning lex
+      
+      </font><font color="#5a5a5a">;; look at the collection of old exemplars from that semantic category</font><font color="#000000">
+      </font><font color="#0000aa">let</font><font color="#000000"> cohort ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> owner) </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> lex]
+    
+      </font><font color="#5a5a5a">;; if you have some of this category, copy it with noise</font><font color="#000000">
+      </font><font color="#0000aa">ifelse</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> cohort </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000">
+      [
+        </font><font color="#5a5a5a">;; production around an exemplar</font><font color="#000000">
+        </font><font color="#0000aa">let</font><font color="#000000"> ex </font><font color="#660096">one-of</font><font color="#000000"> cohort
+        </font><font color="#0000aa">setxy</font><font color="#000000"> ([</font><font color="#660096">xcor</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> ex) ([</font><font color="#660096">ycor</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> ex)
+        </font><font color="#5a5a5a">;; or production around the mean</font><font color="#000000">
+        </font><font color="#5a5a5a">;; setxy [(mean [xcor] of cohort) (mean [ycor] of cohort)]</font><font color="#000000">
+        
+        </font><font color="#5a5a5a">;; add production noise</font><font color="#000000">
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> </font><font color="#660096">random-normal</font><font color="#000000"> </font><font color="#660096">xcor</font><font color="#000000"> prod-noise
+        </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> </font><font color="#660096">random-normal</font><font color="#000000"> </font><font color="#660096">ycor</font><font color="#000000"> prod-noise
+        
+        </font><font color="#5a5a5a">;; categorical perception bias: nudge toward nearest matching exemplar</font><font color="#000000">
+        cat-percept </font><font color="#660096">self</font><font color="#000000">
+      ]
+      [ </font><font color="#5a5a5a">;; when there isn't anything in this category, just pick something random</font><font color="#000000">
+        </font><font color="#0000aa">setxy</font><font color="#000000"> </font><font color="#660096">random-xcor</font><font color="#000000"> </font><font color="#660096">random-ycor</font><font color="#000000">
+      ]
+    
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">shape</font><font color="#000000"> meaning-to-shape meaning
+    ]
+    </font><font color="#0000aa">set</font><font color="#000000"> exemplar-set exemplars </font><font color="#660096">with</font><font color="#000000"> [owner </font><font color="#660096">=</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">] 
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+    
+</font><font color="#007f69">to</font><font color="#000000"> listen  </font><font color="#5a5a5a">;; incorporate a random exemplar with unknown meaning</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+    hatch-exemplars </font><font color="#963700">1</font><font color="#000000"> [
+      </font><font color="#5a5a5a">;; speaker variable is left unset</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> owner </font><font color="#660096">myself</font><font color="#000000">
+      </font><font color="#0000aa">let</font><font color="#000000"> ex </font><font color="#660096">self</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">hidden?</font><font color="#000000"> </font><font color="#660096">not</font><font color="#000000"> (showing </font><font color="#660096">=</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">)
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> </font><font color="#963700">&quot;-&quot;</font><font color="#000000">
+        
+      </font><font color="#0000aa">setxy</font><font color="#000000"> </font><font color="#660096">random-xcor</font><font color="#000000"> </font><font color="#660096">random-ycor</font><font color="#000000"> </font><font color="#5a5a5a">;; hear a token from a random point in the form space</font><font color="#000000">
+      
+      </font><font color="#0000aa">let</font><font color="#000000"> cohort ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> owner) </font><font color="#5a5a5a">;; this doesn't include self</font><font color="#000000">
+      </font><font color="#5a5a5a">;;show cohort</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> meaning [meaning] </font><font color="#660096">of</font><font color="#000000"> </font><font color="#660096">min-one-of</font><font color="#000000"> cohort [ </font><font color="#660096">distance</font><font color="#000000"> ex ]
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000"> </font><font color="#963700">5</font><font color="#000000"> </font><font color="#5a5a5a">;; gray</font><font color="#000000">
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">shape</font><font color="#000000"> meaning-to-shape meaning
+        
+      </font><font color="#5a5a5a">;; categorical perception bias: nudge toward nearest matching exemplar</font><font color="#000000">
+      cat-percept </font><font color="#660096">self</font><font color="#000000">
+    ]
+    </font><font color="#0000aa">set</font><font color="#000000"> exemplar-set exemplars </font><font color="#660096">with</font><font color="#000000"> [owner </font><font color="#660096">=</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">] </font><font color="#5a5a5a">;; update</font><font color="#000000">
+  ]    
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+
+</font><font color="#007f69">to-report</font><font color="#000000"> meaning-to-shape [ index ]
+  </font><font color="#0000aa">report</font><font color="#000000"> </font><font color="#660096">item</font><font color="#000000"> index lexicon
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  Change which person shows</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> next-person 
+  </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">&quot;net&quot;</font><font color="#000000"> [
+    </font><font color="#0000aa">ask</font><font color="#000000"> people [ </font><font color="#0000aa">hide-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">links</font><font color="#000000"> [ </font><font color="#0000aa">hide-link</font><font color="#000000"> ]
+  ]
+  [
+    </font><font color="#0000aa">ask</font><font color="#000000"> (person showing) [</font><font color="#0000aa">hide-turtle</font><font color="#000000">]
+    </font><font color="#0000aa">ask</font><font color="#000000"> ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> person showing) [ </font><font color="#0000aa">hide-turtle</font><font color="#000000"> ]
+  ] 
+   
+  </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> ( num-people </font><font color="#660096">-</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> ) [
+    </font><font color="#0000aa">set</font><font color="#000000"> showing </font><font color="#963700">&quot;net&quot;</font><font color="#000000">
+    </font><font color="#0000aa">ask</font><font color="#000000"> people [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">links</font><font color="#000000"> [ </font><font color="#0000aa">show-link</font><font color="#000000"> ]
+  ] 
+  [
+    </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">&quot;net&quot;</font><font color="#000000"> [
+      </font><font color="#0000aa">set</font><font color="#000000"> showing </font><font color="#963700">0</font><font color="#000000">
+    ] [
+      </font><font color="#0000aa">set</font><font color="#000000"> showing (showing </font><font color="#660096">+</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000">)
+    ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> person showing [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> person showing) [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> prev-person 
+  </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">&quot;net&quot;</font><font color="#000000"> [
+    </font><font color="#0000aa">ask</font><font color="#000000"> people [ </font><font color="#0000aa">hide-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">links</font><font color="#000000"> [ </font><font color="#0000aa">hide-link</font><font color="#000000"> ]
+  ]
+  [
+    </font><font color="#0000aa">ask</font><font color="#000000"> (person showing) [</font><font color="#0000aa">hide-turtle</font><font color="#000000">]
+    </font><font color="#0000aa">ask</font><font color="#000000"> ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> person showing) [ </font><font color="#0000aa">hide-turtle</font><font color="#000000"> ]
+  ] 
+   
+  </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> [
+    </font><font color="#0000aa">set</font><font color="#000000"> showing </font><font color="#963700">&quot;net&quot;</font><font color="#000000">
+    </font><font color="#0000aa">ask</font><font color="#000000"> people [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">links</font><font color="#000000"> [ </font><font color="#0000aa">show-link</font><font color="#000000"> ]
+  ] 
+  [
+    </font><font color="#0000aa">ifelse</font><font color="#000000"> showing </font><font color="#660096">=</font><font color="#000000"> </font><font color="#963700">&quot;net&quot;</font><font color="#000000"> [
+      </font><font color="#0000aa">set</font><font color="#000000"> showing ( num-people </font><font color="#660096">-</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> )
+    ] [
+      </font><font color="#0000aa">set</font><font color="#000000"> showing (showing </font><font color="#660096">-</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000">)
+    ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> person showing [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+    </font><font color="#0000aa">ask</font><font color="#000000"> ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> person showing) [ </font><font color="#0000aa">show-turtle</font><font color="#000000"> ]
+  ]
+</font><font color="#007f69">end</font><font color="#000000">
+
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  Plotting</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+
+</font><font color="#007f69">to</font><font color="#000000"> do-plots
+  </font><font color="#0000aa">let</font><font color="#000000"> summin </font><font color="#963700">0</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> summax </font><font color="#963700">0</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+
+    </font><font color="#0000aa">let</font><font color="#000000"> minvar </font><font color="#963700">0</font><font color="#000000">
+    </font><font color="#0000aa">let</font><font color="#000000"> maxvar </font><font color="#963700">0</font><font color="#000000">
+    </font><font color="#0000aa">foreach</font><font color="#000000"> </font><font color="#660096">n-values</font><font color="#000000"> (</font><font color="#660096">length</font><font color="#000000"> lexicon) [?] [
+      </font><font color="#0000aa">let</font><font color="#000000"> ex-set (exemplar-set </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> ?])
+      </font><font color="#5a5a5a">;; assuming there are exemplars with this meaning, add it on to the accumulated variance</font><font color="#000000">
+      </font><font color="#5a5a5a">;; the divergence measure here is the minimum distance to another exemplar of the same meaning</font><font color="#000000">
+      </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> ex-set </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">1</font><font color="#000000"> [
+        </font><font color="#0000aa">set</font><font color="#000000"> minvar minvar </font><font color="#660096">+</font><font color="#000000"> ( </font><font color="#660096">mean</font><font color="#000000"> ([</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">min-one-of</font><font color="#000000"> </font><font color="#660096">other</font><font color="#000000"> ex-set [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">]] </font><font color="#660096">of</font><font color="#000000"> ex-set)) </font><font color="#660096">^</font><font color="#000000"> </font><font color="#963700">2</font><font color="#000000">
+        </font><font color="#0000aa">set</font><font color="#000000"> maxvar maxvar </font><font color="#660096">+</font><font color="#000000"> ( </font><font color="#660096">mean</font><font color="#000000"> ([</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">max-one-of</font><font color="#000000"> </font><font color="#660096">other</font><font color="#000000"> ex-set [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">]] </font><font color="#660096">of</font><font color="#000000"> ex-set)) </font><font color="#660096">^</font><font color="#000000"> </font><font color="#963700">2</font><font color="#000000">
+      ]
+    ]
+
+    </font><font color="#0000aa">let</font><font color="#000000"> minsd (</font><font color="#660096">sqrt</font><font color="#000000"> minvar) </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon
+    </font><font color="#0000aa">set</font><font color="#000000"> summin summin </font><font color="#660096">+</font><font color="#000000"> minsd      
+    </font><font color="#0000aa">set-current-plot</font><font color="#000000"> </font><font color="#963700">&quot;category min-dist divergence&quot;</font><font color="#000000">
+    </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">plot-pen-exists?</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000"> [
+      </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000">
+      </font><font color="#0000aa">set-plot-pen-color</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000">
+      </font><font color="#0000aa">plot</font><font color="#000000"> minsd
+    ]
+    
+    </font><font color="#0000aa">let</font><font color="#000000"> maxsd (</font><font color="#660096">sqrt</font><font color="#000000"> maxvar) </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon
+    </font><font color="#0000aa">set</font><font color="#000000"> summax summax </font><font color="#660096">+</font><font color="#000000"> maxsd            
+    </font><font color="#0000aa">set-current-plot</font><font color="#000000"> </font><font color="#963700">&quot;category max-dist divergence&quot;</font><font color="#000000">
+    </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">plot-pen-exists?</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000"> [
+      </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000">
+      </font><font color="#0000aa">set-plot-pen-color</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000">
+      </font><font color="#0000aa">plot</font><font color="#000000"> maxsd
+    ]
+  ]
+
+  </font><font color="#0000aa">set-current-plot</font><font color="#000000"> </font><font color="#963700">&quot;category min-dist divergence&quot;</font><font color="#000000">
+  </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#963700">&quot;mean&quot;</font><font color="#000000">
+  </font><font color="#0000aa">plot</font><font color="#000000"> summin </font><font color="#660096">/</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> people)
+  </font><font color="#0000aa">set-current-plot</font><font color="#000000"> </font><font color="#963700">&quot;category max-dist divergence&quot;</font><font color="#000000">
+  </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#963700">&quot;mean&quot;</font><font color="#000000">
+  </font><font color="#0000aa">plot</font><font color="#000000"> summax </font><font color="#660096">/</font><font color="#000000"> (</font><font color="#660096">count</font><font color="#000000"> people)  
+
+  </font><font color="#0000aa">ask</font><font color="#000000"> </font><font color="#660096">links</font><font color="#000000"> [
+    </font><font color="#5a5a5a">;; set the label of each link to the euclidean distance between</font><font color="#000000">
+    </font><font color="#5a5a5a">;; the centers of all the categories of the two people</font><font color="#000000">
+    </font><font color="#0000aa">let</font><font color="#000000"> p1 </font><font color="#660096">min-one-of</font><font color="#000000"> </font><font color="#660096">both-ends</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">]
+    </font><font color="#0000aa">let</font><font color="#000000"> p2 </font><font color="#660096">max-one-of</font><font color="#000000"> </font><font color="#660096">both-ends</font><font color="#000000"> [</font><font color="#660096">who</font><font color="#000000">]
+    </font><font color="#0000aa">let</font><font color="#000000"> dsqr </font><font color="#963700">0</font><font color="#000000">
+    </font><font color="#0000aa">foreach</font><font color="#000000"> </font><font color="#660096">n-values</font><font color="#000000"> (</font><font color="#660096">length</font><font color="#000000"> lexicon) [?] [
+      </font><font color="#5a5a5a">;; the two set of exemplars with this meaning</font><font color="#000000">
+      </font><font color="#0000aa">let</font><font color="#000000"> ex-set1 ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> p1) </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> ?]
+      </font><font color="#0000aa">let</font><font color="#000000"> ex-set2 ([exemplar-set] </font><font color="#660096">of</font><font color="#000000"> p2) </font><font color="#660096">with</font><font color="#000000"> [meaning </font><font color="#660096">=</font><font color="#000000"> ?]
+      
+      </font><font color="#5a5a5a">;; assuming both people have such exemplars, accumulate the squared distances,</font><font color="#000000">
+      </font><font color="#5a5a5a">;; where we take a mean of cross-cluster minimum distances as a typical distance</font><font color="#000000">
+      </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> ex-set1 </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> </font><font color="#660096">and</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> ex-set2 </font><font color="#660096">&gt;</font><font color="#000000"> </font><font color="#963700">0</font><font color="#000000"> [
+        </font><font color="#0000aa">let</font><font color="#000000"> mindists (</font><font color="#660096">sentence</font><font color="#000000"> [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">min-one-of</font><font color="#000000"> ex-set1 [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">]] </font><font color="#660096">of</font><font color="#000000"> ex-set2
+                               [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">min-one-of</font><font color="#000000"> ex-set2 [</font><font color="#660096">distance</font><font color="#000000"> </font><font color="#660096">myself</font><font color="#000000">]] </font><font color="#660096">of</font><font color="#000000"> ex-set1 )
+        </font><font color="#0000aa">set</font><font color="#000000"> dsqr dsqr </font><font color="#660096">+</font><font color="#000000"> (</font><font color="#660096">mean</font><font color="#000000"> mindists) </font><font color="#660096">^</font><font color="#000000"> </font><font color="#963700">2</font><font color="#000000">
+      ]
+    ]
+    </font><font color="#5a5a5a">;; convert the squared differences into a linear distance, with integer precision</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> </font><font color="#660096">precision</font><font color="#000000"> ((</font><font color="#660096">sqrt</font><font color="#000000"> dsqr) </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> lexicon) </font><font color="#963700">1</font><font color="#000000">
+  ]
+  
+  </font><font color="#0000aa">set-current-plot</font><font color="#000000"> </font><font color="#963700">&quot;people min-dist divergence&quot;</font><font color="#000000">
+  </font><font color="#0000aa">let</font><font color="#000000"> divtot </font><font color="#963700">0</font><font color="#000000">
+  </font><font color="#0000aa">ask</font><font color="#000000"> people [
+    </font><font color="#0000aa">let</font><font color="#000000"> div (</font><font color="#660096">sum</font><font color="#000000"> [</font><font color="#660096">label</font><font color="#000000">] </font><font color="#660096">of</font><font color="#000000"> </font><font color="#660096">my-links</font><font color="#000000">) </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> </font><font color="#660096">my-links</font><font color="#000000">
+    </font><font color="#0000aa">set</font><font color="#000000"> divtot divtot </font><font color="#660096">+</font><font color="#000000"> div
+    </font><font color="#0000aa">if</font><font color="#000000"> </font><font color="#660096">plot-pen-exists?</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000"> [
+      </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#660096">word</font><font color="#000000"> </font><font color="#963700">&quot;person &quot;</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000">
+      </font><font color="#0000aa">set-plot-pen-color</font><font color="#000000"> </font><font color="#660096">color</font><font color="#000000">
+      </font><font color="#0000aa">plot</font><font color="#000000"> div
+    ]
+  ]
+  </font><font color="#0000aa">set-current-plot-pen</font><font color="#000000"> </font><font color="#963700">&quot;mean&quot;</font><font color="#000000">
+  </font><font color="#0000aa">plot</font><font color="#000000"> divtot </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">count</font><font color="#000000"> people
+  
+  </font><font color="#0000aa">if</font><font color="#000000"> hear-neighbors [
+    </font><font color="#0000aa">ask</font><font color="#000000"> people [
+      </font><font color="#0000aa">set</font><font color="#000000"> </font><font color="#660096">label</font><font color="#000000"> (</font><font color="#660096">word</font><font color="#000000"> </font><font color="#660096">who</font><font color="#000000"> </font><font color="#963700">&quot;: &quot;</font><font color="#000000"> ( </font><font color="#660096">precision</font><font color="#000000"> ( </font><font color="#660096">sum</font><font color="#000000"> guesses-history </font><font color="#660096">/</font><font color="#000000"> </font><font color="#660096">length</font><font color="#000000"> guesses-history </font><font color="#660096">*</font><font color="#000000"> </font><font color="#963700">100</font><font color="#000000"> ) </font><font color="#963700">0</font><font color="#000000"> ) </font><font color="#963700">&quot;%&quot;</font><font color="#000000"> )
+    ]
+  ]
+  
+</font><font color="#007f69">end</font><font color="#000000">
+
+
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;  License</font><font color="#000000">
+</font><font color="#5a5a5a">;******************************;</font><font color="#000000">
+</font><font color="#5a5a5a">;; This simulation was made by Lucien Carroll &lt;lucien@ling.ucsd.edu&gt;. It is educational software, </font><font color="#000000">
+</font><font color="#5a5a5a">;; created for learning and sharing understanding, and modification with attribution is encouraged. </font><font color="#000000">
+</font><font color="#5a5a5a">;; The license for the NetLogo demos (which this simulation is somewhat based on) reads:</font><font color="#000000">
+</font><font color="#5a5a5a">;;</font><font color="#000000">
+</font><font color="#5a5a5a">;; &quot;NetLogo is Copyright 1999-2009 by Uri Wilensky. All rights reserved.&quot;</font><font color="#000000">
+</font><font color="#5a5a5a">;;</font><font color="#000000">
+</font><font color="#5a5a5a">;; &quot;The NetLogo software, models and documentation are distributed free of</font><font color="#000000">
+</font><font color="#5a5a5a">;; charge for use by the public to explore and construct</font><font color="#000000">
+</font><font color="#5a5a5a">;; models. Permission to copy or modify the NetLogo software, models and</font><font color="#000000">
+</font><font color="#5a5a5a">;; documentation for educational and research purposes only and without</font><font color="#000000">
+</font><font color="#5a5a5a">;; fee is hereby granted, provided that this copyright notice and the</font><font color="#000000">
+</font><font color="#5a5a5a">;; original author's name appears on all copies and supporting</font><font color="#000000">
+</font><font color="#5a5a5a">;; documentation. For any other uses of this software, in original or</font><font color="#000000">
+</font><font color="#5a5a5a">;; modified form, including but not limited to distribution in whole or</font><font color="#000000">
+</font><font color="#5a5a5a">;; in part, specific prior permission must be obtained from Uri</font><font color="#000000">
+</font><font color="#5a5a5a">;; Wilensky. The software, models and documentation shall not be used,</font><font color="#000000">
+</font><font color="#5a5a5a">;; rewritten, or adapted as the basis of a commercial software or</font><font color="#000000">
+</font><font color="#5a5a5a">;; hardware product without first obtaining appropriate licenses from Uri</font><font color="#000000">
+</font><font color="#5a5a5a">;; Wilensky. We make no representations about the suitability of this</font><font color="#000000">
+</font><font color="#5a5a5a">;; software for any purpose. It is provided &quot;as is&quot; without express or</font><font color="#000000">
+</font><font color="#5a5a5a">;; implied warranty.&quot;</font><font color="#000000">
+</font>
+</pre>
+
+</body>
+</html>
