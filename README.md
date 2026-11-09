@@ -37,12 +37,12 @@ uv run python scripts/build_resume_pdf.py
 
 ## Site layout
 
-- `index.html` — two-path home: evaluation/audit consulting and research/writing
+- `index.html` — two-path home: evaluation/audit consulting and research
 - `consulting.html` — evaluation and audit services
-- `research.html` — research and writing hub
+- `research.html` — research hub: language science, applied systems, and selected publications
 - `about.html` — longer bio and personal material
 - `resume.html` / `resume.pdf` — current résumé
-- `documentation.html` — research archive
+- `documentation.html` — research archive, including language documentation data
 - `segmentation/index.html` — discourse segmentation research
 - `lucien.html` — redirect retained for old inbound links
 - `prototype/` — design reference, marked `noindex`
@@ -53,3 +53,4 @@ uv run python scripts/build_resume_pdf.py
 The live pages use a paper-and-ink editorial system: warm paper, dark ink, moss
 and rust accents, Alegreya for display, Karla for body and labels, and Caveat for
 marginalia. Fonts and the paper-grain texture are self-hosted under `assets/`.
+The blog is linked from the footer RSS mark rather than the primary navigation.
