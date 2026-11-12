@@ -18,6 +18,7 @@ dependencies = [
 dev = [
     "html5validator>=0.4.2",
     "playwright>=1.64.1",
+    "pypdf>=5",
     "pytest<9",
     "pytest-playwright>=0.10.0",
     "ruff>=0.17.4",

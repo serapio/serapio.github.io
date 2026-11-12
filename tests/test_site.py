@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -100,3 +101,80 @@ def test_legacy_page_redirects_to_home():
 
 def test_resume_prints_to_pdf():
     assert (ROOT / "resume.pdf").stat().st_size > 10_000
+
+
+def test_resume_pdf_matches_current_content():
+    from pypdf import PdfReader
+
+    soup = BeautifulSoup(
+        (ROOT / "resume.html").read_text(encoding="utf-8"), "html.parser"
+    )
+    headings = [h.get_text(" ", strip=True) for h in soup.select("h2")]
+    assert headings, "resume.html: no h2 headings to canary against"
+
+    pdf_text = " ".join(
+        page.extract_text() or "" for page in PdfReader(ROOT / "resume.pdf").pages
+    )
+    pdf_text = " ".join(pdf_text.split()).casefold()
+    missing = [
+        h
+        for h in headings
+        if " ".join(h.split()).casefold() not in pdf_text
+    ]
+    assert not missing, f"resume.pdf is stale; missing: {missing}"
+
+
+CHROME_FRAGMENTS = [
+    "Discursus · 2026",
+    "Alameda County, California",
+    "© 2026 Lucien S. Carroll",
+    "Static HTML and CSS, written via Kilo Code with",
+]
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_site_chrome_is_consistent(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    text = " ".join(soup.get_text(" ", strip=True).split())
+    for fragment in CHROME_FRAGMENTS:
+        assert fragment in text, f"{page_name}: missing chrome text {fragment!r}"
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_ids_are_unique(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    ids = [element["id"] for element in soup.select("[id]")]
+    duplicates = {i for i in ids if ids.count(i) > 1}
+    assert not duplicates, f"{page_name}: duplicate ids {duplicates}"
+
+
+def test_css_classes_are_used():
+    css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+    classes = set(re.findall(r"\.([a-zA-Z][a-zA-Z0-9_-]*)", css))
+    html = " ".join(
+        (ROOT / name).read_text(encoding="utf-8")
+        for name in [*PAGES, "prototype/home.html", "prototype/style-tile.html"]
+    )
+    unused = sorted(c for c in classes if c not in html)
+    assert not unused, f"site.css: unused class selectors {unused}"
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_images_have_alt_text(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    for image in soup.select("img"):
+        assert image.get("alt", "").strip(), (
+            f"{page_name}: img missing alt text ({image.get('src')})"
+        )
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_aria_references_resolve(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    page_ids = ids_for(ROOT / page_name)
+    for attribute in ("aria-labelledby", "aria-describedby"):
+        for element in soup.select(f"[{attribute}]"):
+            for target in element[attribute].split():
+                assert target in page_ids, (
+                    f"{page_name}: {attribute} points at missing id {target!r}"
+                )

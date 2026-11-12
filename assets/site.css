@@ -216,8 +216,7 @@ a:hover {
 }
 
 .hero h1,
-.page-hero h1,
-.tile-header h1 {
+.page-hero h1 {
   max-width: 13ch;
   margin: 0 0 1.5rem;
   font-family: var(--serif);
@@ -889,25 +888,6 @@ a:hover {
   font-style: normal;
 }
 
-.page-meta {
-  margin: 1.4rem 0 0;
-  color: var(--ink-faint);
-  font-family: var(--hand);
-  font-size: 1.2rem;
-  line-height: 1.2;
-}
-
-.about-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.55fr);
-  gap: clamp(2.5rem, 7vw, 7rem);
-  align-items: center;
-}
-
-.about-hero .hero-plate {
-  justify-self: end;
-}
-
 .service-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -953,54 +933,6 @@ a:hover {
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-.service .service-evidence {
-  margin: 1rem 0 0;
-  color: var(--ink-faint);
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.5;
-  text-transform: uppercase;
-}
-
-.service .service-evidence a {
-  color: inherit;
-  text-underline-offset: 0.18em;
-}
-
-.service .service-evidence a:hover {
-  color: var(--rust);
-}
-
-.quote-panel {
-  padding: clamp(1.8rem, 5vw, 3.5rem);
-  border: 1px solid var(--rule-strong);
-  background: var(--paper-light);
-  box-shadow: 8px 9px 0 rgba(88, 104, 75, 0.12);
-}
-
-.quote-panel p {
-  max-width: 44rem;
-  margin: 0;
-  color: var(--ink-soft);
-  font-family: var(--serif);
-  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
-  font-style: italic;
-  line-height: 1.35;
-}
-
-.quote-panel cite {
-  display: block;
-  margin-top: 1rem;
-  color: var(--ink-faint);
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 
@@ -1092,47 +1024,6 @@ a:hover {
 .archive-list .pub-cite {
   margin: 0.15rem 0 0.45rem;
   font-size: 0.9rem;
-}
-
-.tile-header {
-  padding: clamp(3rem, 7vw, 5.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.tile-header h1 {
-  max-width: 18ch;
-  font-size: clamp(2.6rem, 6vw, 4.8rem);
-  line-height: 0.98;
-}
-
-.tile-header p {
-  max-width: 42rem;
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 1.08rem;
-}
-
-.prototype-bar {
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--rule);
-  background: rgba(168, 95, 56, 0.08);
-}
-
-.prototype-bar p {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.prototype-bar a {
-  color: var(--rust);
-  text-decoration: none;
 }
 
 .prose {
@@ -1385,7 +1276,6 @@ a:hover {
   }
 
   .hero,
-  .about-hero,
   .consulting-hero,
   .research-hero {
     grid-template-columns: 1fr;
@@ -1399,8 +1289,7 @@ a:hover {
     margin-top: 0;
   }
 
-  .hero-plate,
-  .about-hero .hero-plate {
+  .hero-plate {
     justify-self: start;
     width: min(72%, 300px);
   }
@@ -1478,8 +1367,7 @@ a:hover {
     font-size: clamp(2.6rem, 12vw, 3.8rem);
   }
 
-  .hero-plate,
-  .about-hero .hero-plate {
+  .hero-plate {
     width: min(88%, 290px);
   }
 
@@ -1496,11 +1384,6 @@ a:hover {
     grid-template-columns: 1fr;
     gap: 0.55rem;
     padding: 1.4rem 0;
-  }
-
-  .note-meta span {
-    display: inline;
-    margin-left: 0.35rem;
   }
 
   .archive-list li {

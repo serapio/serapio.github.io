@@ -23,8 +23,12 @@ uv run html5validator index.html consulting.html research.html \
   resume.html documentation.html segmentation/index.html lucien.html
 ```
 
-`pytest` checks page structure, internal links, mobile layout, and the generated
-resume PDF with Playwright.
+`pytest` checks page structure, one `h1` per page, internal links, anchors, and
+images, unique ids, alt text and `aria` references, site chrome consistency
+(masthead, location, colophon) across pages, unused CSS class selectors in
+`assets/site.css`, and mobile horizontal overflow (via Playwright). The resume
+PDF is checked for size and for content matching the current `resume.html`
+(via `pypdf`). HTML validity is checked separately with `html5validator`.
 
 ## Résumé
 
