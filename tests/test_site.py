@@ -10,7 +10,6 @@ PAGES = [
     "index.html",
     "consulting.html",
     "research.html",
-    "about.html",
     "resume.html",
     "documentation.html",
     "segmentation/index.html",
@@ -80,7 +79,7 @@ def test_home_offers_both_audiences():
     hrefs = {anchor.get("href") for anchor in soup.select("a[href]")}
     assert "consulting.html" in hrefs
     assert "research.html" in hrefs
-    assert "about.html" in hrefs
+    assert "resume.html" in hrefs
 
 
 @pytest.mark.parametrize("page_name", PAGES)

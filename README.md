@@ -19,7 +19,7 @@ uv run python -m http.server 8000    # preview at http://localhost:8000
 ```sh
 uv run ruff check .
 uv run pytest
-uv run html5validator index.html consulting.html research.html about.html \
+uv run html5validator index.html consulting.html research.html \
   resume.html documentation.html segmentation/index.html lucien.html
 ```
 
@@ -37,10 +37,9 @@ uv run python scripts/build_resume_pdf.py
 
 ## Site layout
 
-- `index.html` — two-path home: evaluation/audit consulting and research
-- `consulting.html` — evaluation and audit services
-- `research.html` — research hub: language science, applied systems, and selected publications
-- `about.html` — longer bio and personal material
+- `index.html` — two-path home: evaluation/internationalization consulting and research
+- `consulting.html` — evaluation, internationalization, and audit services
+- `research.html` — research hub: language science, language technology, and selected publications
 - `resume.html` / `resume.pdf` — current résumé
 - `documentation.html` — research archive, including language documentation data
 - `segmentation/index.html` — discourse segmentation research

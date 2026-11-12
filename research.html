@@ -14,7 +14,7 @@
     <meta property="og:title" content="Research — Lucien S. Carroll" />
     <meta
       property="og:description"
-      content="Language documentation, applied language systems, and the evaluation work that keeps them honest."
+      content="Language documentation, language technology, and the evaluation work that keeps them honest."
     />
     <meta property="og:url" content="https://discurs.us/research.html" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
@@ -27,34 +27,52 @@
       <div class="wrap">
         <div class="masthead-top">
           <a class="brand" href="index.html">Lucien S. Carroll</a>
-          <p class="edition">Selected works &amp; services · 2026</p>
+          <p class="edition">Discursus · 2026</p>
         </div>
         <div class="masthead-bottom">
           <nav class="nav" aria-label="Primary">
             <a href="consulting.html">Work with me</a>
             <a href="research.html" aria-current="page">Research</a>
-            <a href="about.html">About</a>
             <a href="resume.html">Résumé</a>
           </nav>
-          <p class="place">San Leandro, California</p>
+          <p class="place">Alameda County, California</p>
         </div>
       </div>
     </header>
 
     <main id="main">
       <div class="wrap">
-        <header class="page-hero" aria-labelledby="research-title">
-          <p class="hero-kicker">Research &amp; applied work</p>
-          <h1 id="research-title">Language, <em>examined closely.</em></h1>
-          <p class="page-lede">
-            I work across two kinds of evidence: language science and applied
-            language systems. The threads below connect fieldwork, production
-            systems, and the evaluation work that keeps them honest.
-          </p>
-          <div class="hero-actions">
-            <a class="arrow-link" href="#language-science">Language science</a>
-            <a class="arrow-link" href="#applied-systems">Applied systems</a>
+        <header
+          class="page-hero research-hero"
+          aria-labelledby="research-title"
+        >
+          <div class="hero-copy">
+            <p class="hero-kicker">Research &amp; Development</p>
+            <h1 id="research-title">
+              From fieldwork <em>to production systems.</em>
+            </h1>
+            <p class="page-lede">
+              I am engaged in two kinds of research: language science and
+              language technology. I love to help extend our collective understanding of
+              both how human interaction works and what computational systems
+              can usefully do with speech and language.
+            </p>
+            <div class="hero-actions">
+              <a class="arrow-link" href="#language-science">Language science</a>
+              <a class="arrow-link" href="#language-technology">Language technology</a>
+            </div>
           </div>
+
+          <figure class="hero-photo">
+            <img
+              src="assets/trail-walk.jpg"
+              alt="Walking a leaf-strewn trail with a small black dog, under autumn maples and eucalyptus."
+              width="768"
+              height="768"
+              loading="eager"
+            />
+            <figcaption>Plate II · the long way home.</figcaption>
+          </figure>
         </header>
 
         <section
@@ -67,139 +85,154 @@
             <div>
               <h2 id="language-science-title">Language science</h2>
               <p class="section-intro">
-                Description, measurement, and the long work of getting the data
-                right.
-              </p>
-            </div>
-          </div>
-
-          <div class="service-list">
-            <article class="service">
-              <span class="service-tag">Phonetics &amp; phonology</span>
-              <h3>Tone, stress, and word prosody</h3>
-              <p>
-                Acoustic and phonological work on tone languages, especially
-                Ixpantepec Nieves Mixtec, Jinhua Wu, and Choguita Rarámuri.
-                Description first, then measurement.
-              </p>
-              <p class="service-evidence">
-                ICPhS 2015 · IJAL 2015 · PhD thesis 2015
-              </p>
-            </article>
-            <article class="service">
-              <span class="service-tag">Discourse</span>
-              <h3>Structure and segmentation</h3>
-              <p>
-                Hierarchical discourse segmentation and the problem of
-                evaluating it when section breaks differ in importance and
-                location. Still a useful test case for any metric.
-              </p>
-              <p class="service-evidence">
-                NAACL 2010 ·
-                <a href="segmentation/index.html">paper and materials</a>
-              </p>
-            </article>
-            <article class="service">
-              <span class="service-tag">Documentation data</span>
-              <h3>Corpora that stay usable</h3>
-              <p>
-                Lexicons, transcripts, audio, and annotations have to survive
-                tools, formats, and people. I helped build Kwaras and Namuti for
-                an ELAN-based corpus and integrated FLEx, Praat, and ELAN data
-                for the Choguita Rarámuri project.
-              </p>
-              <p class="service-evidence">
-                LD&amp;C 2019 · SCL 2019 ·
-                <a href="documentation.html#raramuri">project notes</a>
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section
-          class="section"
-          id="applied-systems"
-          aria-labelledby="applied-systems-title"
-        >
-          <div class="section-head">
-            <p class="section-no" aria-hidden="true">02</p>
-            <div>
-              <h2 id="applied-systems-title">Applied language systems</h2>
-              <p class="section-intro">
-                Production systems make the same problems sharper: noisy input,
-                uneven languages, high stakes.
-              </p>
-            </div>
-          </div>
-
-          <div class="service-list">
-            <article class="service">
-              <span class="service-tag">ASR &amp; NLU</span>
-              <h3>Conversational interfaces</h3>
-              <p>
-                Production assistants fail at the seams: noisy transcripts,
-                ambiguous entities, and parsers that work on clean text. I have
-                worked on shallow semantic parsing for production interfaces,
-                entity resolution over noisy ASR, and ASR correction.
-              </p>
-              <p class="service-evidence">
-                EMNLP 2018 · EMNLP 2019 · 2 US patents
-              </p>
-            </article>
-            <article class="service">
-              <span class="service-tag">Multilingual</span>
-              <h3>Speech and evaluation across languages</h3>
-              <p>
-                Failure analysis, annotation quality, and evaluation that pays
-                attention to the language rather than the average. I have also
-                fine-tuned XLSR/XLS-R models for Kinyarwanda, Luganda, Uzbek,
-                Uyghur, and Kirgiz in open community events.
-              </p>
-              <p class="service-evidence">
-                Open-source ASR projects · 12+ languages in production
-              </p>
-            </article>
-            <article class="service">
-              <span class="service-tag">Health QA</span>
-              <h3>Question answering for health</h3>
-              <p>
-                Health QA is an evaluation problem as much as a modeling
-                problem: retrieval, answer quality, safety, and domain language.
-                I worked on FoodBench-QA at CL4Health and built evaluation hooks
-                for Kedara’s health-resource assistant.
-              </p>
-              <p class="service-evidence">
-                CL4Health/LREC 2026 · Kedara product work
-              </p>
-            </article>
-          </div>
-          <p class="section-note">
-            These are the same problems I take on in consulting:
-            <a href="consulting.html"
-              >evaluation design, failure analysis, data quality, and health
-              QA</a
-            >.
-          </p>
-        </section>
-
-        <section
-          class="section"
-          id="publications"
-          aria-labelledby="publications-title"
-        >
-          <div class="section-head">
-            <p class="section-no" aria-hidden="true">03</p>
-            <div>
-              <h2 id="publications-title">
-                Selected publications &amp; projects
-              </h2>
-              <p class="section-intro">
-                Peer-reviewed work, patents, datasets, and open experiments,
-                grouped by the problem they address. The full list is on
+                I've mostly been interested in language as a complex system 
+                shaped by the social and cognitive constraints of human interaction and learning.
+                We can model aspects of speech and language as mathematical or computational
+                systems, while holding lightly to these abstractions and tightly to the data details,
+                knowing the abstractions are incomplete.
+                The full publication list is on
                 <a
                   href="https://scholar.google.com/citations?user=kCa9oNoAAAAJ&amp;hl=en"
                   >Google Scholar</a
                 >.
+              </p>
+            </div>
+          </div>
+
+          <div class="pub-group">
+            <h3 class="pub-group-title">Stress and tone</h3>
+            <ul class="archive-list">
+              <li>
+                <p class="archive-meta">2015<br />Peer-reviewed</p>
+                <div>
+                  <h4>
+                    Lexical and post-lexical tone in Choguita Rarámuri
+                  </h4>
+                  <p class="pub-cite">
+                    <a
+                      href="https://www.internationalphoneticassociation.org/icphs-proceedings/ICPhS2015/Papers/ICPHS0254.pdf"
+                      >Garellek, Aguilar, Caballero &amp; Carroll. ICPhS 2015.</a
+                    >
+                  </p>
+                </div>
+              </li>
+              <li>
+                <p class="archive-meta">2015<br />Peer-reviewed</p>
+                <div>
+                  <h4>
+                    Tone and stress in Choguita Rarámuri word prosody
+                  </h4>
+                  <p class="pub-cite">
+                    <a
+                      href="https://www.journals.uchicago.edu/doi/abs/10.1086/683157"
+                      >Caballero &amp; Carroll. International Journal of
+                    American Linguistics, 2015.</a
+                    >
+                  </p>
+                </div>
+              </li>
+              <li>
+                <p class="archive-meta">2015<br />Dissertation</p>
+                <div>
+                  <h4>
+                    Ixpantepec Nieves Mixtec word prosody
+                  </h4>
+                  <p class="pub-cite">
+                    <a href="https://escholarship.org/uc/item/0bs6b7mt">UC San Diego PhD thesis.</a>
+                    <a href="mixtec/NievesPhdDefense.pdf">Presentation.</a>
+                  </p>
+                </div>
+              </li>
+              <li>
+                <p class="archive-meta">2009<br />Working paper</p>
+                <div>
+                  <h4>
+                    <a
+                      href="https://www.researchgate.net/publication/298134907_Jinhua_Dialect_Tone_Sandhi"
+                      >Jinhua dialect tone sandhi</a
+                    >
+                  </h4>
+                  <p class="pub-cite">
+                    <a href="jinhua/Carroll2009JHSandhi.pdf">UC San Diego research paper.</a>
+                    <a href="jinhua/JHPresentLsa.pdf">Workshop presentation.</a>
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <p class="section-note">
+            Some historical context for these papers is in
+            the <a href="documentation.html">language documentation research archive</a>.
+          </p>
+
+          <div class="pub-group">
+            <h3 class="pub-group-title">Phonological typology</h3>
+            <ul class="archive-list">
+              <li>
+                <p class="archive-meta">2012<br />Working paper</p>
+                <div>
+                  <h4>Contrasts and contexts in palatalization</h4>
+                  <p class="pub-cite">
+                    <a href="evolang/Carroll2012Palatalization.pdf"
+                      >UC San Diego CPhil thesis.</a
+                    >
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pub-group">
+            <h3 class="pub-group-title">Datasets</h3>
+            <ul class="archive-list">
+              <li>
+                <p class="archive-meta">2019<br />Peer-reviewed</p>
+                <div>
+                  <h4>
+                    Accessing, managing and mobilizing an ELAN-based language
+                    documentation corpus: the Kwaras and Namuti tools
+                  </h4>
+                  <p class="pub-cite">
+                    <a
+                      href="https://scholarspace.manoa.hawaii.edu/handle/10125/24799"
+                      >Caballero, Carroll &amp; Mach. Language Documentation and
+                    Conservation 13: 63–82.</a>
+                  </p>
+                </div>
+              </li>
+              <li>
+                <p class="archive-meta">2019<br />Dataset</p>
+                <div>
+                  <h4>
+                    Materials of the Choguita Rarámuri Language Project
+                  </h4>
+                  <p class="pub-cite">
+                    <a href="https://doi.org/10.7297/X2HH6H70"
+                      >Chaparro Gardea et al. SCL 2019-01, Survey of California and
+                    Other Indian Languages.</a
+                    >
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section
+          class="section"
+          id="language-technology"
+          aria-labelledby="language-technology-title"
+        >
+          <div class="section-head">
+            <p class="section-no" aria-hidden="true">02</p>
+            <div>
+              <h2 id="language-technology-title">Language technology</h2>
+              <p class="section-intro">
+                Since my first computational linguistics class more than 25 years ago,
+                computational systems have become much more useful for processing
+                speech and language, and yet the path from an experimental prototype 
+                to a reliable production system still depends on a combination of 
+                user-centered design, pragmatic engineering, and rigorous evaluation.
               </p>
             </div>
           </div>
@@ -211,15 +244,13 @@
                 <p class="archive-meta">2018<br />Peer-reviewed</p>
                 <div>
                   <h4>
-                    <a href="https://aclanthology.org/D18-2027/"
-                      >Developing production-level conversational interfaces
-                      with shallow semantic parsing</a
-                    >
+                    Developing production-level conversational interfaces
+                    with shallow semantic parsing
                   </h4>
-                  <p>
-                    Raghuvanshi, Carroll &amp; Raghunathan. EMNLP 2018. A
-                    practical architecture for moving assistants from prototype
-                    to production without full semantic parses.
+                  <p class="pub-cite">
+                    <a href="https://aclanthology.org/D18-2027/"
+                      >Raghuvanshi, Carroll &amp; Raghunathan. EMNLP 2018.</a
+                    >
                   </p>
                 </div>
               </li>
@@ -227,14 +258,13 @@
                 <p class="archive-meta">2019<br />Peer-reviewed</p>
                 <div>
                   <h4>
-                    <a href="https://aclanthology.org/D19-3011/"
-                      >Entity resolution for noisy ASR transcripts</a
-                    >
+                    Entity resolution for noisy ASR transcripts
                   </h4>
-                  <p>
-                    Raghuvanshi, Ramakrishnan, Embar, Carroll &amp;
-                    Raghunathan. EMNLP 2019. Recovering person names from noisy
-                    transcripts in a production voice assistant.
+                  <p class="pub-cite">
+                    <a href="https://aclanthology.org/D19-3011/"
+                      >Raghuvanshi, Ramakrishnan, Embar, Carroll &amp;
+                    Raghunathan. EMNLP 2019.</a
+                    >
                   </p>
                 </div>
               </li>
@@ -242,11 +272,9 @@
                 <p class="archive-meta">2022 · 2025<br />Patents</p>
                 <div>
                   <h4>
-                    <a href="https://patents.justia.com/patent/11482213"
-                      >Automatic speech recognition correction</a
-                    >
+                    Automatic speech recognition correction
                   </h4>
-                  <p>
+                  <p class="pub-cite">
                     Raghunathan, Raghuvanshi, Ramakrishnan, Carroll &amp;
                     Embar. US Patent
                     <a href="https://patents.justia.com/patent/11482213"
@@ -256,18 +284,28 @@
                     <a href="https://patents.justia.com/patent/12300225"
                       >12,300,225</a
                     >
-                    (2025, continuation). Domain-specific correction of
-                    mistranscribed entities.
+                    (2025, continuation).
                   </p>
                 </div>
               </li>
+            </ul>
+          </div>
+
+          <div class="pub-group">
+            <h3 class="pub-group-title">Multilingual ASR</h3>
+            <ul class="archive-list">
               <li>
                 <p class="archive-meta">2021–2022<br />Open-source</p>
                 <div>
                   <h4>XLSR/XLS-R fine-tuning for low-resource languages</h4>
-                  <p>
-                    Speech models fine-tuned for Kinyarwanda, Luganda, Uzbek,
-                    Uyghur, and Kirgiz in Hugging Face community events.
+                  <p class="pub-cite">
+                    Speech models fine-tuned for
+                    <a href="https://huggingface.co/lucio/wav2vec2-large-xlsr-kinyarwanda-apostrophied">Kinyarwanda</a>,
+                    <a href="https://huggingface.co/lucio/wav2vec2-large-xlsr-luganda">Luganda</a>,
+                    <a href="https://huggingface.co/lucio/xls-r-uzbek-cv8">Uzbek</a>,
+                    <a href="https://huggingface.co/lucio/xls-r-uyghur-cv8">Uyghur</a>,
+                    and <a href="https://huggingface.co/lucio/xls-r-kyrgiz-cv8">Kirgiz</a>.
+                    Hugging Face community events.
                   </p>
                 </div>
               </li>
@@ -275,37 +313,16 @@
           </div>
 
           <div class="pub-group">
-            <h3 class="pub-group-title">Language documentation</h3>
+            <h3 class="pub-group-title">Input methods</h3>
             <ul class="archive-list">
               <li>
-                <p class="archive-meta">2019<br />Peer-reviewed</p>
+                <p class="archive-meta">2022<br />Open-source</p>
                 <div>
-                  <h4>
-                    <a
-                      href="https://scholarspace.manoa.hawaii.edu/handle/10125/24799"
-                      >Accessing, managing and mobilizing an ELAN-based language
-                      documentation corpus: the Kwaras and Namuti tools</a
+                  <h4>Koreguaje keyboard</h4>
+                  <p class="pub-cite">
+                    <a href="https://keyman.com/keyboards/koreguaje"
+                      >Keyman keyboards, experimental.</a
                     >
-                  </h4>
-                  <p>
-                    Caballero, Carroll &amp; Mach. Language Documentation and
-                    Conservation 13: 63–82. The Kwaras and Namuti tools for
-                    building, searching, and sharing documentation corpora.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <p class="archive-meta">2019<br />Dataset</p>
-                <div>
-                  <h4>
-                    <a href="https://doi.org/10.7297/X2HH6H70"
-                      >Materials of the Choguita Rarámuri Language Project</a
-                    >
-                  </h4>
-                  <p>
-                    Chaparro Gardea et al. SCL 2019-01, Survey of California and
-                    Other Indian Languages. Recordings, annotations, and project
-                    metadata.
                   </p>
                 </div>
               </li>
@@ -313,174 +330,83 @@
           </div>
 
           <div class="pub-group">
-            <h3 class="pub-group-title">Health question answering</h3>
+            <h3 class="pub-group-title">Topic segmentation</h3>
+            <ul class="archive-list">
+              <li>
+                <p class="archive-meta">2010<br />Peer-reviewed</p>
+                <div>
+                  <h4>
+                    Evaluating hierarchical discourse segmentation
+                  </h4>
+                  <p class="pub-cite">
+                    <a href="https://aclanthology.org/N10-1143.pdf"
+                      >Carroll. NAACL 2010.</a
+                    >
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <p class="section-note">
+            Some historical context of this work is in the
+            <a href="segmentation/index.html">segmentation research archive</a>.
+          </p>
+
+          <div class="pub-group">
+            <h3 class="pub-group-title">Question answering</h3>
             <ul class="archive-list">
               <li>
                 <p class="archive-meta">2026<br />Peer-reviewed</p>
                 <div>
                   <h4>
+                    Cohere Labs Community at FoodBench-QA 2026: The cake
+                    makes the ingredients
+                  </h4>
+                  <p class="pub-cite">
                     <a href="https://aclanthology.org/2026.cl4health-1.39/"
-                      >Cohere Labs Community at FoodBench-QA 2026: The cake
-                      makes the ingredients</a
+                      >Ranjan, Santhosh &amp; Carroll. CL4Health Workshop at LREC
+                    2026.</a
                     >
-                  </h4>
-                  <p>
-                    Ranjan, Santhosh &amp; Carroll. CL4Health Workshop at LREC
-                    2026. Retrieval and entity linking for nutrition question
-                    answering.
                   </p>
                 </div>
               </li>
               <li>
-                <p class="archive-meta">2025–2026<br />Product work</p>
+                <p class="archive-meta">2026<br />Product work</p>
                 <div>
-                  <h4>Kedara Guide evaluation</h4>
+                  <h4>Kedara Guide</h4>
                   <p>
-                    Evaluation hooks, tracing, and failure analysis for a RAG
-                    and dialogue assistant that helps older adults find health
-                    and wellness resources.
+                    RAG-based <a href="https://kedara.care/guide">chat assistant</a> for finding eldercare resources.
                   </p>
                 </div>
               </li>
             </ul>
           </div>
-
-          <div class="pub-group">
-            <h3 class="pub-group-title">Language science</h3>
-            <ul class="archive-list">
-              <li>
-                <p class="archive-meta">2015<br />Peer-reviewed</p>
-                <div>
-                  <h4>
-                    <a href="documentation.html#raramuri"
-                      >Lexical and post-lexical tone in Choguita Rarámuri</a
-                    >
-                  </h4>
-                  <p>
-                    Garellek, Aguilar, Caballero &amp; Carroll. ICPhS 2015.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <p class="archive-meta">2015<br />Peer-reviewed</p>
-                <div>
-                  <h4>
-                    <a href="documentation.html#raramuri"
-                      >Tone and stress in Choguita Rarámuri word prosody</a
-                    >
-                  </h4>
-                  <p>
-                    Caballero &amp; Carroll. International Journal of American
-                    Linguistics, 2015.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <p class="archive-meta">2015<br />Dissertation</p>
-                <div>
-                  <h4>
-                    <a href="documentation.html#mixtec"
-                      >Ixpantepec Nieves Mixtec word prosody</a
-                    >
-                  </h4>
-                  <p>
-                    UC San Diego PhD thesis. A phonological description and
-                    acoustic study of stress and tone.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <p class="archive-meta">2010<br />Peer-reviewed</p>
-                <div>
-                  <h4>
-                    <a href="segmentation/index.html"
-                      >Evaluating hierarchical discourse segmentation</a
-                    >
-                  </h4>
-                  <p>
-                    Carroll. NAACL 2010. A metric that accounts for differing
-                    section importance and imprecise break locations.
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section" id="writing" aria-labelledby="writing-title">
-          <div class="section-head">
-            <p class="section-no" aria-hidden="true">04</p>
-            <div>
-              <h2 id="writing-title">Writing elsewhere</h2>
-              <p class="section-intro">
-                Less formal, more current, and occasionally illustrated.
-              </p>
-            </div>
-          </div>
-
-          <ul class="archive-list">
-            <li>
-              <p class="archive-meta">Blog<br />Ongoing</p>
-              <div>
-                <h3>
-                  <a href="https://blog.discurs.us/">Discurs.us</a>
-                </h3>
-                <p>
-                  Essays and notes on language, technology, evaluation, and
-                  whatever else has escaped the notebook.
-                </p>
-              </div>
-            </li>
-            <li>
-              <p class="archive-meta">Illustrated<br />Web book</p>
-              <div>
-                <h3>
-                  <a href="https://blog.discurs.us/whiled_life/"
-                    >Whiled Life</a
-                  >
-                </h3>
-                <p>
-                  A book-shaped experiment in pictures, text, and paper. The
-                  visual direction of this site owes it a debt.
-                </p>
-              </div>
-            </li>
-            <li>
-              <p class="archive-meta">About the author<br />Slightly true</p>
-              <div>
-                <h3>
-                  <a href="https://blog.discurs.us/about.html"
-                    >The longer, stranger version</a
-                  >
-                </h3>
-                <p>
-                  The blog’s about page: poetry, dogs, and a biography that has
-                  been left alone with a thesaurus.
-                </p>
-              </div>
-            </li>
-          </ul>
+          <p class="section-note">
+            These are the same problems I take on in consulting:
+            <a href="consulting.html"
+              >evaluation design, data quality, and failure analysis</a
+            >.
+          </p>
         </section>
       </div>
 
       <section class="night" aria-labelledby="collaborate-title">
         <div class="wrap">
           <div class="section-head">
-            <p class="section-no" aria-hidden="true">05</p>
+            <p class="section-no" aria-hidden="true">03</p>
             <div>
               <h2 id="collaborate-title">Working on a hard language problem?</h2>
               <p class="section-intro">
-                I am interested in collaborations on language documentation,
-                multilingual evaluation, tone and prosody, health QA, and the
-                unglamorous work of making data trustworthy.
+                I am especially interested in collaborations about 
+                multilingual speech technology for healthcare applications,
+                and collaborations with indigenous communities about custom language technology.
               </p>
             </div>
           </div>
           <div class="hero-actions">
             <a class="button" href="mailto:lucien@discurs.us?subject=Research%20collaboration"
-              >lucien@discurs.us</a
+              >Email me</a
             >
-            <a class="arrow-link" href="documentation.html">Full research archive</a>
           </div>
         </div>
       </section>
@@ -521,7 +447,7 @@
         </div>
         <div class="footer-bottom">
           <p>© 2026 Lucien S. Carroll</p>
-          <p class="colophon">Set in Alegreya, Karla &amp; Caveat.</p>
+          <p class="colophon">Static HTML and CSS, written via Kilo Code with <a href="https://inference.coop">inference.coop</a> models. Content my own.</p>
         </div>
       </div>
     </footer>
