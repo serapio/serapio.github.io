@@ -153,7 +153,7 @@ def test_css_classes_are_used():
     classes = set(re.findall(r"\.([a-zA-Z][a-zA-Z0-9_-]*)", css))
     html = " ".join(
         (ROOT / name).read_text(encoding="utf-8")
-        for name in [*PAGES, "prototype/home.html", "prototype/style-tile.html"]
+        for name in [*PAGES, "prototype/style-tile.html"]
     )
     unused = sorted(c for c in classes if c not in html)
     assert not unused, f"site.css: unused class selectors {unused}"

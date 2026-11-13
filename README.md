@@ -45,10 +45,10 @@ uv run python scripts/build_resume_pdf.py
 - `consulting.html` — evaluation, internationalization, and audit services
 - `research.html` — research hub: language science, language technology, and selected publications
 - `resume.html` / `resume.pdf` — current résumé
-- `documentation.html` — research archive, including language documentation data
-- `segmentation/index.html` — discourse segmentation research
+- `documentation.html` — language documentation research archive
+- `segmentation/index.html` — discourse segmentation research archive
 - `lucien.html` — redirect retained for old inbound links
-- `prototype/` — design reference, marked `noindex`
+- `prototype/style-tile.html` — style tile (palette, type, components), marked `noindex`
 - `CV20xx.pdf` — historical academic CVs
 
 ## Design
