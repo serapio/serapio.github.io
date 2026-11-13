@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 PAGES = [
     "index.html",
-    "consulting.html",
+    "lucien.html",
     "research.html",
     "resume.html",
     "documentation.html",
@@ -75,10 +75,17 @@ def test_links_and_images_resolve(page_name):
         )
 
 
-def test_home_offers_both_audiences():
+def test_home_links_to_research():
     soup = BeautifulSoup((ROOT / "index.html").read_text(encoding="utf-8"), "html.parser")
     hrefs = {anchor.get("href") for anchor in soup.select("a[href]")}
-    assert "consulting.html" in hrefs
+    assert "research.html" in hrefs
+    assert "lucien.html" in hrefs
+
+
+def test_profile_links_to_the_work():
+    soup = BeautifulSoup((ROOT / "lucien.html").read_text(encoding="utf-8"), "html.parser")
+    hrefs = {anchor.get("href") for anchor in soup.select("a[href]")}
+    assert "index.html" in hrefs
     assert "research.html" in hrefs
     assert "resume.html" in hrefs
 
@@ -92,11 +99,11 @@ def test_mobile_layout_has_no_horizontal_scroll(page, page_name):
     assert scroll_width <= client_width, f"{page_name}: horizontal overflow"
 
 
-def test_legacy_page_redirects_to_home():
+def test_profile_page_is_indexed_content():
     soup = BeautifulSoup((ROOT / "lucien.html").read_text(encoding="utf-8"), "html.parser")
-    refresh = soup.find("meta", attrs={"http-equiv": "refresh"})
-    assert refresh is not None
-    assert "url=index.html" in refresh["content"].lower()
+    assert soup.find("meta", attrs={"http-equiv": "refresh"}) is None
+    robots = soup.find("meta", attrs={"name": "robots"})
+    assert robots is None or "noindex" not in (robots.get("content") or "")
 
 
 def test_resume_prints_to_pdf():
@@ -125,9 +132,8 @@ def test_resume_pdf_matches_current_content():
 
 
 CHROME_FRAGMENTS = [
-    "Discursus · 2026",
-    "Alameda County, California",
-    "© 2026 Lucien S. Carroll",
+    "Alameda County, CA · 2026",
+    "© 2026 Lucien Carroll",
     "Static HTML and CSS, written via Kilo Code with",
 ]
 
