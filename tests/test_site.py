@@ -156,12 +156,15 @@ def test_ids_are_unique(page_name):
 
 def test_css_classes_are_used():
     css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+    css = re.sub(r"url\([^)]*\)", "", css)
     classes = set(re.findall(r"\.([a-zA-Z][a-zA-Z0-9_-]*)", css))
-    html = " ".join(
-        (ROOT / name).read_text(encoding="utf-8")
-        for name in [*PAGES, "prototype/style-tile.html"]
-    )
-    unused = sorted(c for c in classes if c not in html)
+    used = set()
+    html_files = [*PAGES, "prototype/style-tile.html"]
+    for name in html_files:
+        soup = BeautifulSoup((ROOT / name).read_text(encoding="utf-8"), "html.parser")
+        for element in soup.find_all(class_=True):
+            used.update(element.get("class", []))
+    unused = sorted(c for c in classes if c not in used)
     assert not unused, f"site.css: unused class selectors {unused}"
 
 

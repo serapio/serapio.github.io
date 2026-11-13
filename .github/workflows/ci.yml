@@ -29,5 +29,5 @@ jobs:
 
       - name: Validate HTML
         run: >
-          uv run html5validator index.html consulting.html research.html
-          resume.html documentation.html segmentation/index.html lucien.html
+          uv run html5validator index.html lucien.html research.html
+          resume.html documentation.html segmentation/index.html
