@@ -1,19 +1,19 @@
 @import url("fonts/fonts.css");
 
 :root {
-  --paper: #e9e2d2;
-  --paper-light: #f3eee3;
-  --paper-deep: #ded5c2;
+  --paper: #f2ecdf;
+  --paper-light: #f9f5ec;
+  --paper-deep: #e7dfcd;
   --ink: #211f1a;
-  --ink-soft: #514c41;
-  --ink-faint: #5e584d;
-  --moss: #58684b;
-  --moss-deep: #3f4c37;
-  --blue: #3a6378;
-  --rust: #8f4b2a;
+  --ink-soft: #454036;
+  --ink-faint: #4b463e;
+  --moss: #3e4934;
+  --moss-deep: #3c4834;
+  --blue: #2b4a5a;
+  --rust: #6b381f;
   --night: #1d1b17;
   --night-ink: #ded6c5;
-  --night-soft: #aaa08d;
+  --night-soft: #b1a796;
   --mint: #a8d5c2;
   --rule: rgba(33, 31, 26, 0.2);
   --rule-strong: rgba(33, 31, 26, 0.42);
@@ -30,6 +30,7 @@
 }
 
 html {
+  font-size: 106.25%; /* 17px at the browser default */
   scroll-behavior: smooth;
 }
 
@@ -47,7 +48,7 @@ body {
     url("paper-grain.svg");
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
@@ -117,19 +118,12 @@ a:hover {
   padding-top: 1.1rem;
 }
 
-.masthead-top,
-.masthead-bottom {
+.masthead-top {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 2rem;
-}
-
-.masthead-top {
-  padding-bottom: 0.75rem;
-}
-
-.masthead-bottom {
+  gap: 0.55rem 2rem;
   padding: 0.55rem 0 0.7rem;
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule-strong);
@@ -148,23 +142,13 @@ a:hover {
   color: var(--ink);
 }
 
-.edition,
-.place {
+.edition {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.place {
-  color: var(--moss-deep);
-  font-family: var(--hand);
-  font-size: 1.2rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .nav {
@@ -175,7 +159,7 @@ a:hover {
 
 .nav a {
   color: var(--ink-soft);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-decoration: none;
@@ -201,7 +185,7 @@ a:hover {
   gap: 0.7rem;
   margin: 0 0 1.25rem;
   color: var(--moss-deep);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -225,6 +209,8 @@ a:hover {
   letter-spacing: -0.045em;
   line-height: 0.94;
   text-wrap: balance;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .hero h1 em,
@@ -256,7 +242,7 @@ a:hover {
   padding-bottom: 0.18rem;
   border-bottom: 1px solid var(--rust);
   color: var(--ink);
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-decoration: none;
@@ -283,7 +269,7 @@ a:hover {
   border: 1px solid var(--rule-strong);
   background: var(--paper-light);
   color: var(--ink);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-decoration: none;
@@ -433,7 +419,7 @@ a:hover {
 .path-label {
   margin: 0;
   color: var(--rust);
-  font-size: 0.64rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -491,7 +477,7 @@ a:hover {
 .note-meta {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.64rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   line-height: 1.5;
@@ -526,7 +512,7 @@ a:hover {
   display: block;
   margin-top: 0.55rem;
   color: var(--moss-deep);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -638,7 +624,7 @@ a:hover {
 .footer-kicker {
   margin: 0 0 0.5rem;
   color: var(--ink-soft);
-  font-size: 0.62rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -711,7 +697,7 @@ a:hover {
 .footer-bottom p {
   margin: 0;
   color: var(--ink-faint);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   letter-spacing: 0.04em;
 }
 
@@ -841,7 +827,7 @@ a:hover {
 .definition-term span {
   color: var(--rust);
   font-family: var(--sans);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -880,12 +866,6 @@ a:hover {
 
 .definition-senses .definition-practice {
   color: var(--ink);
-}
-
-.definition-practice em {
-  font-family: var(--hand);
-  font-size: 1.15em;
-  font-style: normal;
 }
 
 .service-list {
@@ -930,7 +910,7 @@ a:hover {
   display: block;
   margin-bottom: 0.4rem;
   color: var(--rust);
-  font-size: 0.62rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -954,7 +934,7 @@ a:hover {
 .archive-meta {
   margin: 0;
   color: var(--ink-faint);
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.13em;
   line-height: 1.5;
@@ -1008,7 +988,7 @@ a:hover {
 .pub-group-title {
   margin: 0 0 0.6rem;
   color: var(--rust);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1120,7 +1100,7 @@ a:hover {
 .resume-toolbar p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1261,18 +1241,13 @@ a:hover {
 }
 
 @media (max-width: 900px) {
-  body {
-    font-size: 16px;
+  html {
+    font-size: 100%; /* 16px at the browser default */
   }
 
-  .masthead-top,
-  .masthead-bottom {
+  .masthead-top {
     flex-wrap: wrap;
     gap: 0.55rem 2rem;
-  }
-
-  .masthead-bottom {
-    padding-top: 0.7rem;
   }
 
   .hero,
@@ -1519,7 +1494,7 @@ a:hover {
   }
 }
 
-/* Prototype style tile (prototype/style-tile.html) */
+/* Prototype style tile */
 
 .prototype-bar {
   padding: 0.7rem 0;
@@ -1534,7 +1509,7 @@ a:hover {
   gap: 0.5rem 1rem;
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1605,7 +1580,7 @@ a:hover {
 
 .swatch-info span {
   color: var(--ink-soft);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
 }
 
 .type-specimen {
