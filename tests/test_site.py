@@ -134,7 +134,7 @@ def test_resume_pdf_matches_current_content():
 CHROME_FRAGMENTS = [
     "Alameda County, CA · 2026",
     "© 2026 Lucien Carroll",
-    "Static HTML and CSS, written via Kilo Code with",
+    "Static HTML and CSS, coded via",
 ]
 
 
@@ -187,3 +187,62 @@ def test_aria_references_resolve(page_name):
                 assert target in page_ids, (
                     f"{page_name}: {attribute} points at missing id {target!r}"
                 )
+
+
+PUBLISHED_EMAIL = "contact@discurs.us"
+PRIVATE_EMAIL = "lucien@discurs.us"
+DELETED_PAGES = ["consulting.html", "about.html"]
+
+
+def test_real_email_never_published():
+    for name in [*PAGES, "prototype/style-tile.html", "README.md", "resume.pdf"]:
+        data = (ROOT / name).read_bytes()
+        assert PRIVATE_EMAIL.encode() not in data, (
+            f"{name}: real address must not be published; use {PUBLISHED_EMAIL}"
+        )
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_published_email_is_alias(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    mailtos = [a["href"] for a in soup.select('a[href^="mailto:"]')]
+    for href in mailtos:
+        assert PRIVATE_EMAIL in href or PUBLISHED_EMAIL in href, (
+            f"{page_name}: unexpected mailto {href}"
+        )
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_no_links_to_deleted_pages(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    for anchor in soup.select("a[href]"):
+        path = urlsplit(anchor["href"]).path
+        assert not any(path.endswith(f"/{name}") or path == name for name in DELETED_PAGES), (
+            f"{page_name}: links to deleted page {anchor['href']}"
+        )
+    text = (ROOT / page_name).read_text(encoding="utf-8")
+    for name in DELETED_PAGES:
+        assert f'href="{name}"' not in text, f"{page_name}: links to {name}"
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_og_tags_match_head_meta(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    title = soup.title.get_text(strip=True)
+    og_title = soup.find("meta", attrs={"property": "og:title"})
+    assert og_title is not None and og_title["content"] == title, (
+        f"{page_name}: og:title does not match <title>"
+    )
+    canonical = soup.find("link", attrs={"rel": "canonical"})
+    og_url = soup.find("meta", attrs={"property": "og:url"})
+    if canonical and og_url:
+        assert og_url["content"] == canonical["href"], (
+            f"{page_name}: og:url does not match canonical"
+        )
+
+
+@pytest.mark.parametrize("page_name", PAGES)
+def test_external_links_use_https(page_name):
+    soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
+    for anchor in soup.select('a[href^="http://"]'):
+        assert False, f"{page_name}: insecure external link {anchor['href']}"
