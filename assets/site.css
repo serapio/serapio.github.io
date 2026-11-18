@@ -3,11 +3,8 @@
 :root {
   --paper: #f2ecdf;
   --paper-light: #f9f5ec;
-  --paper-deep: #e7dfcd;
   --ink: #211f1a;
   --ink-soft: #454036;
-  --ink-faint: #4b463e;
-  --moss: #3e4934;
   --moss-deep: #3c4834;
   --blue: #2b4a5a;
   --rust: #6b381f;
@@ -700,7 +697,7 @@ a:hover {
 
 .footer-bottom p {
   margin: 0;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
 }
@@ -953,7 +950,7 @@ a:hover {
 
 .archive-meta {
   margin: 0;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.13em;
@@ -1230,7 +1227,7 @@ a:hover {
 }
 
 .resume-role-head span {
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
@@ -1251,7 +1248,7 @@ a:hover {
 }
 
 .resume-inline dt {
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   font-weight: 700;
 }
 

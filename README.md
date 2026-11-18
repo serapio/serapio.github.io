@@ -1,7 +1,7 @@
 # discurs.us
 
-Personal portfolio for Lucien Carroll. Static HTML/CSS, served by GitHub
-Pages at [discurs.us](https://discurs.us).
+Discursus Technology Consulting — Lucien Carroll's consulting site. Static
+HTML/CSS, served by GitHub Pages at [discurs.us](https://discurs.us).
 
 ## Local development
 
