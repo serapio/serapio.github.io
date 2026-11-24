@@ -1,0 +1,30 @@
+# Web search crawlers: welcome everywhere.
+User-agent: *
+Allow: /
+
+# AI training crawlers: no access to photos (JPGs) or research documents (PDFs).
+# HTML pages remain crawlable for discoverability.
+User-agent: GPTBot
+User-agent: CCBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Applebot-Extended
+User-agent: FacebookBot
+User-agent: Meta-ExternalAgent
+User-agent: Bytespider
+User-agent: Diffbot
+User-agent: YouBot
+User-agent: Google-Extended
+Disallow: /*.pdf$
+Disallow: /*.jpg$
+Disallow: /mixtec/
+Disallow: /jinhua/
+Disallow: /evolang/
+
+# AI search assistants: may fetch pages on behalf of their users.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Perplexity-User
+Allow: /
+
+Sitemap: https://discurs.us/sitemap.xml
