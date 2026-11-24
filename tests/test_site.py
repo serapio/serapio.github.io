@@ -246,3 +246,38 @@ def test_external_links_use_https(page_name):
     soup = BeautifulSoup((ROOT / page_name).read_text(encoding="utf-8"), "html.parser")
     for anchor in soup.select('a[href^="http://"]'):
         assert False, f"{page_name}: insecure external link {anchor['href']}"
+
+
+def test_sitemap_urls_resolve():
+    import xml.etree.ElementTree as ET
+
+    root = ET.fromstring((ROOT / "sitemap.xml").read_text(encoding="utf-8"))
+    ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    locs = [e.text for e in root.findall(".//s:url/s:loc", ns)]
+    assert len(locs) == len(PAGES), (
+        f"sitemap has {len(locs)} urls, expected {len(PAGES)}"
+    )
+    for loc in locs:
+        path = unquote(urlsplit(loc).path)
+        target = ROOT / (path.lstrip("/") or "index.html")
+        if target.is_dir():
+            target = target / "index.html"
+        assert target.exists(), f"sitemap lists missing page {loc}"
+
+
+def test_robots_txt_policy():
+    text = (ROOT / "robots.txt").read_text(encoding="utf-8")
+    assert "Sitemap: https://discurs.us/sitemap.xml" in text
+
+    # default group (web search): everything allowed
+    default = text.split("User-agent: *", 1)[1].split("User-agent:", 1)[0]
+    assert "Allow: /" in default
+    assert "Disallow:" not in default
+
+    # AI training crawlers: PDFs and document directories blocked
+    assert "Disallow: /*.pdf$" in text
+    for bot in ("GPTBot", "CCBot", "ClaudeBot", "Bytespider", "Applebot-Extended"):
+        assert f"User-agent: {bot}" in text
+    # AI search assistants stay allowed
+    assert "User-agent: OAI-SearchBot" in text
+    assert "User-agent: Perplexity-User" in text
